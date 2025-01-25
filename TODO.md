@@ -1,6 +1,14 @@
 # TODO : Planification et suivi du projet iStore
 
-## Étape 1 : Connexion (Login)
+## Étape 1 : Inscription (SignUp)
+- [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
+- [x] Vérifier si l'email existe déjà dans la base de données.
+- [x] Afficher un message d'erreur si le mail est déjà existant.
+- [x] Hasher le mot de passe.
+- [x] Valider la création de compte
+
+---
+## Étape 2 : Connexion (Login)
 - [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
 - [ ] Vérifier si l'email existe dans la base de données.
 - [ ] Comparer le mot de passe saisi avec celui haché dans la base.
@@ -9,7 +17,7 @@
 
 ---
 
-## Étape 2 : Gestion des rôles
+## Étape 3 : Gestion des rôles
 - [ ] Implémenter deux rôles : **Admin** et **Employé**.
 - [ ] Permissions pour les **Admins** :
 - [ ] Créer ou supprimer des magasins.
@@ -20,14 +28,14 @@
 
 ---
 
-## Étape 3 : Gestion des magasins
+## Étape 4 : Gestion des magasins
 - [ ] Permettre aux admins de créer ou supprimer des magasins.
 - [ ] Permettre aux admins de lister les employés associés à un magasin.
 - [ ] Associer les employés à des magasins via une table dédiée (ex. `EMPLOYEE_STORE`).
 
 ---
 
-## Étape 4 : Gestion des articles (Inventaire)
+## Étape 5 : Gestion des articles (Inventaire)
 - [ ] Permettre aux admins d’ajouter, modifier ou supprimer des articles dans l’inventaire.
 - [ ] Permettre aux employés d’ajuster les quantités des articles (vente ou réception).
 - [ ] Permettre aux employés de lister les articles d’un magasin.
@@ -37,7 +45,7 @@
 
 ---
 
-## Étape 5 : Interface utilisateur (UI)
+## Étape 6 : Interface utilisateur (UI)
 - [ ] Implémenter une interface graphique avec **JavaFX** ou **Swing**.
 - [ ] Ajouter des champs de saisie pour les formulaires.
 - [ ] Ajouter des boutons pour les actions (connexion, création de compte, etc.).
@@ -45,7 +53,7 @@
 
 ---
 
-## Étape 6 : Sécurisation et validations
+## Étape 7 : Sécurisation et validations
 - [ ] Utiliser **BCrypt** pour le hachage des mots de passe.
 - [ ] Valider les entrées utilisateur :
 - [ ] Vérifier que les emails ont un format valide.
@@ -53,14 +61,14 @@
 
 ---
 
-## Étape 7 : Documentation
+## Étape 8 : Documentation
 - [ ] Ajouter des commentaires JavaDoc aux classes et méthodes.
 - [ ] Créer un schéma UML pour expliquer les relations entre les classes et la base de données.
 - [ ] Rédiger un fichier README expliquant comment exécuter l'application.
 
 ---
 
-## Étape 8 : Bonus
+## Étape 9 : Bonus
 - [ ] Implémenter un système de **sessions** pour :
 - [ ] Identifier quel utilisateur est actuellement connecté.
 - [ ] Personnaliser l'expérience utilisateur.
