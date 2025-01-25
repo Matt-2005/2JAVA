@@ -12,10 +12,10 @@
 ## Étape 2 : Gestion des rôles
 - [ ] Implémenter deux rôles : **Admin** et **Employé**.
 - [ ] Permissions pour les **Admins** :
-  - [ ] Créer ou supprimer des magasins.
-  - [ ] Ajouter ou retirer des employés d'un magasin.
+- [ ] Créer ou supprimer des magasins.
+- [ ] Ajouter ou retirer des employés d'un magasin.
 - [ ] Permissions pour les **Employés** :
-  - [ ] Ajouter ou retirer des articles dans l'inventaire.
+- [ ] Ajouter ou retirer des articles dans l'inventaire.
 - [ ] Afficher des menus différents selon le rôle de l'utilisateur.
 
 ---
