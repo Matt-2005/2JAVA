@@ -1,7 +1,7 @@
 # TODO : Planification et suivi du projet iStore
 
 ## Étape 1 : Connexion (Login)
-- [ ] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
+- [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
 - [ ] Vérifier si l'email existe dans la base de données.
 - [ ] Comparer le mot de passe saisi avec celui haché dans la base.
 - [ ] Afficher un message d'erreur si les identifiants sont incorrects.
