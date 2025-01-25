@@ -4,14 +4,14 @@ public class User {
     private int Id;
     private String Email;
     private String Pseudo;
-    private String PasswordHash;
+    private String hashedPassword;
     private String Role;
 
-    public User(int Id, String Email, String Pseudo, String PasswordHash, String Role) {
+    public User(int Id, String Email, String Pseudo, String hashedPassword, String Role) {
         this.Id = Id;
         this.Email = Email;
         this.Pseudo = Pseudo;
-        this.PasswordHash = PasswordHash;
+        this.hashedPassword = hashedPassword;
         this.Role = Role;
     }
 
@@ -40,11 +40,11 @@ public class User {
     }
 
     public String getPasswordHash() {
-        return PasswordHash;
+        return hashedPassword;
     }
 
-    public void setPasswordHash(String PasswordHash) {
-        this.PasswordHash = PasswordHash;
+    public void setPasswordHash(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public String getRole() {

@@ -1,5 +1,6 @@
 package com.iStore;
 
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -41,21 +42,27 @@ public class Main {
     }
 
     private static void userSignIn(UserDAO userDAO, Scanner scanner) {
+
         System.out.print("Email : ");
         String Email = scanner.nextLine();
         System.out.print("Pseudo : ");
         String Pseudo = scanner.nextLine();
         System.out.print("Mot de passe : ");
-        String PasswordHash = scanner.nextLine();
+        String Password = scanner.nextLine();
 
-        User user = new User(0, Email, Pseudo, PasswordHash, null);
+        
+
 
         try{
+            String hashedPassword = PasswordHash.passwordHash(Password);
+
+            User user = new User(0, Email, Pseudo, hashedPassword, null);
+
             if (userDAO.verifyEmail(Email)) {
                 System.out.println("This email is existing. Please try with an auther email or try to sign in.");
             }
             userDAO.createUser(user);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Erreur lors de la création du compte : " + e.getMessage());
         }
     }
