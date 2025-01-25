@@ -9,7 +9,7 @@
 
 ---
 ## Étape 2 : Connexion (Login)
-- [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
+- [ ] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
 - [ ] Vérifier si l'email existe dans la base de données.
 - [ ] Comparer le mot de passe saisi avec celui haché dans la base.
 - [ ] Afficher un message d'erreur si les identifiants sont incorrects.
