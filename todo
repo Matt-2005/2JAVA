@@ -32,8 +32,8 @@
 - [ ] Permettre aux employés d’ajuster les quantités des articles (vente ou réception).
 - [ ] Permettre aux employés de lister les articles d’un magasin.
 - [ ] Créer les tables nécessaires :
-  - [ ] **`ITEMS`** : Stocke les informations des articles (nom, prix, etc.).
-  - [ ] **`INVENTORY`** : Lien entre les magasins et les articles avec les quantités.
+- [ ] **`ITEMS`** : Stocke les informations des articles (nom, prix, etc.).
+- [ ] **`INVENTORY`** : Lien entre les magasins et les articles avec les quantités.
 
 ---
 
@@ -48,8 +48,8 @@
 ## Étape 6 : Sécurisation et validations
 - [ ] Utiliser **BCrypt** pour le hachage des mots de passe.
 - [ ] Valider les entrées utilisateur :
-  - [ ] Vérifier que les emails ont un format valide.
-  - [ ] S'assurer que les champs obligatoires ne sont pas vides.
+- [ ] Vérifier que les emails ont un format valide.
+- [ ] S'assurer que les champs obligatoires ne sont pas vides.
 
 ---
 
@@ -62,11 +62,11 @@
 
 ## Étape 8 : Bonus
 - [ ] Implémenter un système de **sessions** pour :
-  - [ ] Identifier quel utilisateur est actuellement connecté.
-  - [ ] Personnaliser l'expérience utilisateur.
+- [ ] Identifier quel utilisateur est actuellement connecté.
+- [ ] Personnaliser l'expérience utilisateur.
 - [ ] Ajouter la possibilité d'exporter des données au format **CSV** ou **JSON** :
-  - [ ] Articles.
-  - [ ] Utilisateurs.
+- [ ] Articles.
+- [ ] Utilisateurs.
 
 ---
 
