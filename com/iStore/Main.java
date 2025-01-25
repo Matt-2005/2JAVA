@@ -51,6 +51,9 @@ public class Main {
         User user = new User(0, Email, Pseudo, PasswordHash, null);
 
         try{
+            if (userDAO.verifyEmail(Email)) {
+                System.out.println("This email is existing. Please try with an auther email or try to sign in.");
+            }
             userDAO.createUser(user);
         } catch (SQLException e) {
             System.out.println("Erreur lors de la création du compte : " + e.getMessage());

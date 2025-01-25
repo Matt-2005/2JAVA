@@ -2,6 +2,7 @@ package com.iStore;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
@@ -18,5 +19,20 @@ public class UserDAO {
                 System.out.println("Compte créé avec succès !");
 
             }
+    }
+
+    public boolean verifyEmail(String Email) throws SQLException {
+        String requeteSQL = "SELECT COUNT(*) FROM USER WHERE EMAIL = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Email);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+            return false;
     }
 }

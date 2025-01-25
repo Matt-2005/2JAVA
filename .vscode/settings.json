@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/matthewle/Downloads/Vertica JDBC 24.2.0.jar",
+        "/Users/matthewle/Downloads/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar"
+    ]
+}
