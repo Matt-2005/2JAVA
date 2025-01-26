@@ -11,8 +11,6 @@ public class DatabaseConfig {
         final String USER = "root";
         final String PASSWORD = "root";
     
-        System.out.println("Connexion en cours...");
-
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

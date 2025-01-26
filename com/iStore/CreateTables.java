@@ -12,6 +12,7 @@ public class CreateTables {
                 EMAIL VARCHAR(255) NOT NULL UNIQUE,
                 PSEUDO VARCHAR(100) NOT NULL, 
                 PASSWORD_HASH VARCHAR(255) NOT NULL,
+                SALT VARCHAR(100) NOT NULL,
                 ROLE VARCHAR(100) NOT NULL DEFAULT 'Employé'
                 );
                 """;

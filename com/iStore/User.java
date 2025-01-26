@@ -5,13 +5,15 @@ public class User {
     private String Email;
     private String Pseudo;
     private String hashedPassword;
+    private String Salt;
     private String Role;
 
-    public User(int Id, String Email, String Pseudo, String hashedPassword, String Role) {
+    public User(int Id, String Email, String Pseudo, String hashedPassword, String Salt, String Role) {
         this.Id = Id;
         this.Email = Email;
         this.Pseudo = Pseudo;
         this.hashedPassword = hashedPassword;
+        this.Salt = Salt;
         this.Role = Role;
     }
 
@@ -45,6 +47,14 @@ public class User {
 
     public void setPasswordHash(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public String getSalt() {
+        return Salt;
+    }
+
+    public void setSalt(String Salt) {
+        this.Salt = Salt;
     }
 
     public String getRole() {
