@@ -25,6 +25,10 @@ public class Main {
             case 2:
                 userLogIn(userDAO, scanner);
                 break;
+            case 3:
+                WelcomeWindow welcomeWindow = new WelcomeWindow();
+                welcomeWindow.welcomeWindow();
+                break;
         
             default:
             System.out.println("Option invalide !");
@@ -36,6 +40,7 @@ public class Main {
         System.out.println("Que voulez vous faire? ");
         System.out.println("1 - Créer un compte");
         System.out.println("2 - Se connecter");
+        System.out.println("3 - Interface graphique");
         System.out.print("> ");
     }
 
