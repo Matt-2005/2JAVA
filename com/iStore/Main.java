@@ -14,35 +14,35 @@ public class Main {
             System.out.println("Erreur lors de l'execution : " + e.getMessage());
         }
 
-        displayMenu();
-        int choise = scanner.nextInt();
-        scanner.nextLine();
+        GraphicInterface welcomeWindow = new GraphicInterface();
+        welcomeWindow.myInterface();
+        System.out.println("Interface graphique lancée !");
 
-        switch (choise) {
-            case 1:
-                userSignIn(userDAO, scanner);
-                break;
-            case 2:
-                userLogIn(userDAO, scanner);
-                break;
-            case 3:
-                WelcomeWindow welcomeWindow = new WelcomeWindow();
-                welcomeWindow.welcomeWindow();
-                break;
+        // switch (choise) {
+        //     case 1:
+        //         userSignIn(userDAO, scanner);
+        //         break;
+        //     case 2:
+        //         userLogIn(userDAO, scanner);
+        //         break;
+        //     case 3:
+        //         WelcomeWindow welcomeWindow = new WelcomeWindow();
+        //         welcomeWindow.welcomeWindow();
+        //         break;
         
-            default:
-            System.out.println("Option invalide !");
-        }
+        //     default:
+        //     System.out.println("Option invalide !");
+        // }
     }
 
 
-    private static void displayMenu() {
-        System.out.println("Que voulez vous faire? ");
-        System.out.println("1 - Créer un compte");
-        System.out.println("2 - Se connecter");
-        System.out.println("3 - Interface graphique");
-        System.out.print("> ");
-    }
+    // private static void displayMenu() {
+    //     System.out.println("Que voulez vous faire? ");
+    //     System.out.println("1 - Créer un compte");
+    //     System.out.println("2 - Se connecter");
+    //     System.out.println("3 - Interface graphique");
+    //     System.out.print("> ");
+    // }
 
     private static void userSignIn(UserDAO userDAO, Scanner scanner) {
 
@@ -80,7 +80,7 @@ public class Main {
                 String Password = scanner.nextLine();
 
                 if (userDAO.verifyEmail(Email)) {
-                    if (userDAO.verifyAccout(Email, Password)) {
+                    if (userDAO.verifyAccount(Email, Password)) {
                         System.out.println("Connection reussie !");
                         login = true;
                     } else {

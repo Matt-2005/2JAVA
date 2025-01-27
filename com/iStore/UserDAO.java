@@ -8,10 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 
-import javax.xml.crypto.Data;
 
 public class UserDAO {
-    public void createUser(User user) throws SQLException {
+    public boolean createUser(User user) throws SQLException {
         String sql = "INSERT INTO USER (EMAIL, PSEUDO, PASSWORD_HASH, SALT) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -22,8 +21,7 @@ public class UserDAO {
                 pstmt.setString(4, user.getSalt());
                 pstmt.executeUpdate();
 
-                System.out.println("Compte créé avec succès !");
-
+                return true;
             }
     }
 
@@ -42,7 +40,7 @@ public class UserDAO {
             return false;
     }
 
-    public boolean verifyAccout(String Email, String Password) throws Exception{
+    public boolean verifyAccount(String Email, String Password) throws Exception{
         String requeteSQL = "SELECT PASSWORD_HASH, SALT FROM USER WHERE EMAIL = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
