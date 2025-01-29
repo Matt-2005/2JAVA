@@ -41,7 +41,6 @@ public class GraphicInterface {
         JButton loginButton = new JButton("Login");
         JButton signUpButton = new JButton("SignUp");
 
-        // Écouteurs pour naviguer entre les pages
         loginButton.addActionListener(e -> cardLayout.show(mainPanel, "Login"));
         signUpButton.addActionListener(e -> cardLayout.show(mainPanel, "SignUp"));
 
@@ -66,20 +65,13 @@ public class GraphicInterface {
         JPasswordField passwordField = new JPasswordField();
         panel.add(passwordField);
 
-        // Bouton "Retour"
         JButton backButton = new JButton("Retour");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
 
-        // Bouton "Se connecter"
         JButton loginButton = new JButton("Se connecter");
         loginButton.addActionListener(e -> {
-             // Récupérer les données saisies
             String email = emailField.getText();
             String password = new String(passwordField.getPassword());
-
-             // Afficher les données pour tester (tu peux les envoyer à ton backend ici)
-            System.out.println("Email : " + email);
-            System.out.println("Mot de passe : " + password);
 
             try {
                 User user = userDAO.verifyAccount(email, password);
@@ -98,7 +90,6 @@ public class GraphicInterface {
             }
         });
 
-        // Ajouter les boutons au panneau
         panel.add(backButton);
         panel.add(loginButton);
 
