@@ -40,8 +40,8 @@ public class UserDAO {
             return false;
     }
 
-    public boolean verifyAccount(String Email, String Password) throws Exception{
-        String requeteSQL = "SELECT PASSWORD_HASH, SALT FROM USER WHERE EMAIL = ?";
+    public User verifyAccount(String Email, String Password) throws Exception{
+        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, PASSWORD_HASH, SALT, ROLE FROM USER WHERE EMAIL = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
@@ -49,8 +49,12 @@ public class UserDAO {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
+                    int storedID = rs.getInt("ID");
+                    String storedEmail = rs.getString("EMAIL");
+                    String storedPseudo = rs.getString("PSEUDO");
                     String storedPasswordHash = rs.getString("PASSWORD_HASH");
                     String storedSalt = rs.getString("SALT");
+                    String storedRole = rs.getString("ROLE");
 
                     byte[] salt = Base64.getDecoder().decode(storedSalt);
                     
@@ -59,13 +63,11 @@ public class UserDAO {
                     byte[] inputHashByte = md.digest(Password.getBytes(StandardCharsets.UTF_8));
                     String inputHashBase64 = Base64.getEncoder().encodeToString(inputHashByte);
 
-                    return inputHashBase64.equals(storedPasswordHash);
-
-
+                    if (inputHashBase64.equals(storedPasswordHash)) {
+                        return new User(storedID, storedEmail, storedPseudo, storedPasswordHash, storedSalt, storedRole);
+                    }
                 }
-            } catch (Exception e) {
-                System.out.println("Erreur lors de la verification du login : " + e.getMessage());
             }
-            return false;
-    }
+            return null;
+}
 }
