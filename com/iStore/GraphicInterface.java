@@ -24,6 +24,7 @@ public class GraphicInterface {
         mainPanel.add(createSignUpPanel(), "SignUp");
         mainPanel.add(createAdminPanel(), "AdminDashboard");
         mainPanel.add(createEmployeePanel(), "EmployeePanel");
+        mainPanel.add(createStorePanel(), "StoreCreation");
 
         // Ajouter le panneau principal à la fenêtre
         frame.add(mainPanel);
@@ -79,7 +80,6 @@ public class GraphicInterface {
                     if (user.getRole().equals("Admin")) {
                         cardLayout.show(mainPanel, "AdminDashboard");
                     } else {
-                        System.out.print(user.getRole() + "l'erreur est la");
                         cardLayout.show(mainPanel, "EmployeePanel");
                     } 
                 } else {
@@ -162,6 +162,7 @@ public class GraphicInterface {
         JPanel storePanel = new JPanel();
         storePanel.setBorder(BorderFactory.createTitledBorder("Gestion des Magasins"));
         JButton createStoreBtn = new JButton("Créer un magasin");
+        createStoreBtn.addActionListener(e -> cardLayout.show(mainPanel, "StoreCreation"));
         JButton deleteStoreBtn = new JButton("Supprimer un magasin");
         JButton listStoreBtn = new JButton("Voir les magasins");
         storePanel.add(createStoreBtn);
@@ -232,5 +233,45 @@ public class GraphicInterface {
     
         return panel;
     }
+
+    private JPanel createStorePanel() {
+        AdminDAO adminDAO = new AdminDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2, 10, 10));
+
+        panel.add(new JLabel("Nom du magasin :"));
+
+        JTextField nameField = new JTextField();
+        panel.add(nameField);
+
+        JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
+        panel.add(backButton);
+        
+        JButton createButton = new JButton("Créer le Magasin");
+        createButton.addActionListener(e -> {
+            String Name = nameField.getText();
+            try {
+                if (!adminDAO.verifyName(Name)) {
+                    if (adminDAO.createStore(0, Name)) {
+                        JOptionPane.showMessageDialog(panel, "Magasin " + Name + " créé avec succès !.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(panel, "Erreur lors de la création du magasin.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Le nom est déja utilisé.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+                
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la création du magasin : " + ex.getMessage());
+            }
+        });
+        
+        panel.add(createButton);
+
+        return panel;
+    }
+
+
     
 }

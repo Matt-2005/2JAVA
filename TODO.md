@@ -13,7 +13,7 @@
 - [x] Vérifier si l'email existe dans la base de données.
 - [x] Comparer le mot de passe saisi avec celui haché dans la base.
 - [x] Afficher un message d'erreur si les identifiants sont incorrects.
-- [ ] Accéder à l'espace utilisateur en cas de succès.
+- [x] Accéder à l'espace utilisateur en cas de succès.
 
 ---
 
