@@ -18,7 +18,7 @@
 ---
 
 ## Étape 3 : Gestion des rôles
-- [ ] Implémenter deux rôles : **Admin** et **Employé**.
+- [x] Implémenter deux rôles : **Admin** et **Employé**.
 - [ ] Permissions pour les **Admins** :
 - [ ] Créer ou supprimer des magasins.
 - [ ] Ajouter ou retirer des employés d'un magasin.

@@ -1,7 +1,17 @@
 package com.iStore;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.xml.crypto.Data;
+
 import java.awt.*;
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GraphicInterface {
     private JFrame frame;
@@ -25,6 +35,7 @@ public class GraphicInterface {
         mainPanel.add(createAdminPanel(), "AdminDashboard");
         mainPanel.add(createEmployeePanel(), "EmployeePanel");
         mainPanel.add(createStorePanel(), "StoreCreation");
+        mainPanel.add(createDisplayStores(), "DisplayStore");
 
         // Ajouter le panneau principal à la fenêtre
         frame.add(mainPanel);
@@ -165,6 +176,7 @@ public class GraphicInterface {
         createStoreBtn.addActionListener(e -> cardLayout.show(mainPanel, "StoreCreation"));
         JButton deleteStoreBtn = new JButton("Supprimer un magasin");
         JButton listStoreBtn = new JButton("Voir les magasins");
+        listStoreBtn.addActionListener(e -> cardLayout.show(mainPanel, "DisplayStore"));
         storePanel.add(createStoreBtn);
         storePanel.add(deleteStoreBtn);
         storePanel.add(listStoreBtn);
@@ -202,35 +214,62 @@ public class GraphicInterface {
     private JPanel createEmployeePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-    
+
         // Titre
         JLabel titleLabel = new JLabel("Panneau Employé", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         panel.add(titleLabel, BorderLayout.NORTH);
-    
-        // Tableau pour lister les employés (vide pour le moment)
+
+        // Définition des colonnes
         String[] columnNames = {"ID", "Nom", "Email", "Rôle"};
-        Object[][] data = {}; // À remplir avec des données réelles plus tard
-        JTable employeeTable = new JTable(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+
+        List<User> employees = new ArrayList<>();
+        
+        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE FROM USER";
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
+            ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    int Id = rs.getInt("ID");
+                    String Pseudo = rs.getString("PSEUDO");
+                    String Email = rs.getString("EMAIL");
+                    String Role = rs.getString("ROLE");
+
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (User user : employees) {
+            model.addRow(new Object[]{user.getId(), user.getPseudo(), user.getEmail(), user.getRole()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         panel.add(scrollPane, BorderLayout.CENTER);
-    
+
         // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton addEmployeeBtn = new JButton("Ajouter un employé");
         JButton removeEmployeeBtn = new JButton("Supprimer un employé");
         JButton backButton = new JButton("Retour");
-    
+
         // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
-    
+
         // Ajouter les boutons au panel des boutons
         buttonPanel.add(addEmployeeBtn);
         buttonPanel.add(removeEmployeeBtn);
         buttonPanel.add(backButton);
-    
+
         panel.add(buttonPanel, BorderLayout.SOUTH);
-    
+        
+
         return panel;
     }
 
@@ -272,6 +311,62 @@ public class GraphicInterface {
         return panel;
     }
 
+    private JPanel createDisplayStores() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        // Titre
+        JLabel titleLabel = new JLabel("Panneau Magasins", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // Définition des colonnes
+        String[] columnNames = {"ID", "Nom"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+
+        List<Store> stores = new ArrayList<>();
+        
+        String requeteSQL = "SELECT ID, NAME FROM STORE";
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
+            ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    int Id = rs.getInt("ID");
+                    String Name = rs.getString("NAME");
+
+                    stores.add(new Store(Id, Name));
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (Store store : stores) {
+            model.addRow(new Object[]{store.getId(), store.getName()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Panel pour les boutons
+        JPanel buttonPanel = new JPanel();
+        JButton backButton = new JButton("Retour");
+        
+        // Bouton Retour vers AdminDashboard
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
+
+        // Ajouter les boutons au panel des boutons
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        
+
+        return panel;
+    } 
+
+    
 
     
 }
