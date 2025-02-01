@@ -1,5 +1,5 @@
 ## Basic authentication need to be setup
-- [x]When running the application, the first window should ask the user
+- [x] When running the application, the first window should ask the user
 - [x]to create an account (will require a email/password)
 - [x]a way to login (using only login/password)
 - [ ]To successfully create an account the email should have been "whitelisted" first
