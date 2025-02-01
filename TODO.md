@@ -12,7 +12,7 @@
 - [x] User is at least {id, email, pseudo, password, role}
 - [x] Normal users can read information about another user (not the password)
 - [x] You can create a new user even without being logged (just need your email to be whitelisted)
-- [ ] You can only update yourself (other users cannot update you EXCEPT if admin)
+- [x] You can only update yourself (other users cannot update you EXCEPT if admin)
 - [ ] You can only delete yourself (other users cannot delete you EXCEPT if admin)
 ## Admin management
 - [ ] The first user is by default an admin (or you can create a default admin/admin user)
