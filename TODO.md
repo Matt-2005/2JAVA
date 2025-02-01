@@ -8,7 +8,7 @@
 - [x] If an error is thrown during the login or create user action you need to give the user what is the issue
 ## User management solution
 - [x] Create, Read, Delete user
-- [ ] Update user
+- [x] Update user
 - [x] User is at least {id, email, pseudo, password, role}
 - [x] Normal users can read information about another user (not the password)
 - [x] You can create a new user even without being logged (just need your email to be whitelisted)

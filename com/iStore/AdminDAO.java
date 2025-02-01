@@ -57,4 +57,23 @@ public class AdminDAO {
                 return affectedRows > 0;
             }
     }
+
+    public boolean updateUser(String emailToUpdate, String Email, String Pseudo, String PasswordHash, String Salt, String Role) throws SQLException{
+        String requeteSQL = "UPDATE USER SET EMAIL = ?, PSEUDO = ?, PASSWORD_HASH = ?, SALT = ?, ROLE = ? WHERE EMAIL = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Email);
+                pstmt.setString(2, Pseudo);
+                pstmt.setString(3, PasswordHash);
+                pstmt.setString(4, Salt);
+                pstmt.setString(5, Role);
+                pstmt.setString(6, emailToUpdate);
+                int affectedRows = pstmt.executeUpdate();
+
+                return affectedRows > 0;
+            }
+    }
+
+
 }

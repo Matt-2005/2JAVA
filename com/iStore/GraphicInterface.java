@@ -12,6 +12,8 @@ public class GraphicInterface {
     private JFrame frame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
+    private String emailToUpdate;
+    private String currentEmailAccountConnected;
 
     public void myInterface() {
         // Initialisation de la fenêtre principale
@@ -32,9 +34,11 @@ public class GraphicInterface {
         mainPanel.add(createStorePanel(), "StoreCreation");
         mainPanel.add(createDisplayStoresPanel(), "DisplayStore");
         mainPanel.add(createDeleteStorePanel(), "DeleteStore");
-        mainPanel.add(createUserPanel(), "AddUser");
+        mainPanel.add(createAddUserPanel(), "AddUser");
         mainPanel.add(createDeleteUserPanel(), "DeleteUser");
         mainPanel.add(createDisplayUserPanel(), "DisplayUser");
+        mainPanel.add(createUpdateWhatUserPanel(), "WhatUserToUpdate");
+        mainPanel.add(createUpdateUserPanel(), "UpdateUser");
 
         // Ajouter le panneau principal à la fenêtre
         frame.add(mainPanel);
@@ -162,7 +166,7 @@ public class GraphicInterface {
 
     private JPanel createAdminPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1, 10, 10));
+        panel.setLayout(new GridLayout(4, 1, 10, 10));
 
         JLabel titleLabel = new JLabel("Panneau d'Administration", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -190,9 +194,12 @@ public class GraphicInterface {
         removeEmployeeBtn.addActionListener(e -> cardLayout.show(mainPanel, "DeleteUser"));
         JButton listEmployeeBtn = new JButton("Voir les employés");
         listEmployeeBtn.addActionListener(e -> cardLayout.show(mainPanel, "DisplayUser"));
+        JButton updateUserButton = new JButton("Mettre à jour un utilisateur");
+        updateUserButton.addActionListener(e -> cardLayout.show(mainPanel, "WhatUserToUpdate"));
         employeePanel.add(addEmployeeBtn);
         employeePanel.add(removeEmployeeBtn);
         employeePanel.add(listEmployeeBtn);
+        employeePanel.add(updateUserButton);
 
         // Section Gestion de l'Inventaire
         JPanel inventoryPanel = new JPanel();
@@ -258,8 +265,8 @@ public class GraphicInterface {
 
         // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
-        JButton addEmployeeBtn = new JButton("Ajouter un employé");
-        JButton removeEmployeeBtn = new JButton("Supprimer un employé");
+        JButton addEmployeeBtn = new JButton("Modifier mon compte");
+        JButton removeEmployeeBtn = new JButton("Supprimer mon compte");
         JButton backButton = new JButton("Retour");
 
         // Bouton Retour vers AdminDashboard
@@ -443,7 +450,7 @@ public class GraphicInterface {
         return panel;
     } 
 
-    private JPanel createUserPanel() {
+    private JPanel createAddUserPanel() {
         UserDAO userDAO = new UserDAO();
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2, 10, 10));
@@ -627,6 +634,132 @@ public class GraphicInterface {
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
         
+
+        return panel;
+    }
+
+    private JPanel createUpdateWhatUserPanel() {
+        UserDAO userDAO = new UserDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 3, 10, 10));
+        // Titre
+        JLabel titleLabel = new JLabel("Liste des utilisateurs", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // Définition des colonnes
+        String[] columnNames = {"ID", "Email", "Pseudo", "Rôle"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+
+        List<User> employees = new ArrayList<>();
+        
+        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE FROM USER";
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
+            ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    int Id = rs.getInt("ID");
+                    String Email = rs.getString("EMAIL");
+                    String Pseudo = rs.getString("PSEUDO");
+                    String Role = rs.getString("ROLE");
+
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (User user : employees) {
+            model.addRow(new Object[]{user.getId(), user.getEmail(), user.getPseudo(), user.getRole()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        panel.add(new JLabel("Email de l'utilisateur à suprimer :", JLabel.CENTER));
+        JTextField emailField = new JTextField();
+        panel.add(emailField);
+        // Panel pour les boutons
+        JPanel buttonPanel = new JPanel();
+        JButton backButton = new JButton("Retour");
+        JButton updateButton = new JButton("Mettre à jour");
+        
+        // Bouton Retour vers AdminDashboard
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
+        updateButton.addActionListener(e -> {
+            try {
+                String Email = emailField.getText();
+                if (!userDAO.verifyEmail(Email)) {
+                    JOptionPane.showMessageDialog(panel, "Cet utilisateur n'existe pas. Veuillez saisir un autre email", "Erreur", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    emailToUpdate = Email;
+                    cardLayout.show(mainPanel, "UpdateUser");
+                }
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la suppression de l'utilisateur : " + ex.getMessage());
+            }
+            
+        });
+
+        // Ajouter les boutons au panel des boutons
+        buttonPanel.add(backButton);
+        buttonPanel.add(updateButton);
+
+        panel.add(buttonPanel, BorderLayout.CENTER);
+        
+
+        return panel;
+    }
+
+    private JPanel createUpdateUserPanel() {
+        AdminDAO adminDAO = new AdminDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2, 10, 10));
+        
+        panel.add(new JLabel("Email :"));
+        JTextField emailField = new JTextField();
+        panel.add(emailField);
+
+        panel.add(new JLabel("Pseudo :"));
+        JTextField pseudoField = new JTextField();
+        panel.add(pseudoField);
+
+        panel.add(new JLabel("Role :"));
+        JTextField roleField = new JTextField();
+        panel.add(roleField);
+
+        panel.add(new JLabel("Mot de passe :"));
+        JPasswordField passwordField = new JPasswordField();
+        panel.add(passwordField);
+        JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "WhatUserToUpdate"));
+        
+
+        JButton signUpButton = new JButton("Mettre à jour");
+
+        signUpButton.addActionListener(e -> {
+            String newEmail = emailField.getText();
+            String newPseudo = pseudoField.getText();
+            String newRole = roleField.getText();
+            String newPassword = new String(passwordField.getPassword());
+            try{
+                PasswordHash.HashResults hashResults = PasswordHash.passwordHash(newPassword);
+
+                if (adminDAO.updateUser(emailToUpdate, newEmail, newPseudo, hashResults.getHashedPassword(), hashResults.getSalt(), newRole)) {
+                    JOptionPane.showMessageDialog(panel, "L'utilisateur " + newPseudo + " à été mis a jour avec succès !.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la mise a jour de l'utilisateur : " + ex.getMessage());
+            }
+        });
+
+        panel.add(backButton);
+        panel.add(signUpButton);
 
         return panel;
     }
