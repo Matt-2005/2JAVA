@@ -1,87 +1,37 @@
-# TODO : Planification et suivi du projet iStore
-
-## Étape 1 : Inscription (SignUp)
-- [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
-- [x] Vérifier si l'email existe déjà dans la base de données.
-- [x] Afficher un message d'erreur si le mail est déjà existant.
-- [x] Hasher le mot de passe.
-- [x] Valider la création de compte
-
----
-## Étape 2 : Connexion (Login)
-- [x] Permettre à l'utilisateur de saisir son **email** et son **mot de passe**.
-- [x] Vérifier si l'email existe dans la base de données.
-- [x] Comparer le mot de passe saisi avec celui haché dans la base.
-- [x] Afficher un message d'erreur si les identifiants sont incorrects.
-- [x] Accéder à l'espace utilisateur en cas de succès.
-
----
-
-## Étape 3 : Gestion des rôles
-- [x] Implémenter deux rôles : **Admin** et **Employé**.
-- [ ] Permissions pour les **Admins** :
-- [ ] Créer ou supprimer des magasins.
-- [ ] Ajouter ou retirer des employés d'un magasin.
-- [ ] Permissions pour les **Employés** :
-- [ ] Ajouter ou retirer des articles dans l'inventaire.
-- [ ] Afficher des menus différents selon le rôle de l'utilisateur.
-
----
-
-## Étape 4 : Gestion des magasins
-- [ ] Permettre aux admins de créer ou supprimer des magasins.
-- [ ] Permettre aux admins de lister les employés associés à un magasin.
-- [ ] Associer les employés à des magasins via une table dédiée (ex. `EMPLOYEE_STORE`).
-
----
-
-## Étape 5 : Gestion des articles (Inventaire)
-- [ ] Permettre aux admins d’ajouter, modifier ou supprimer des articles dans l’inventaire.
-- [ ] Permettre aux employés d’ajuster les quantités des articles (vente ou réception).
-- [ ] Permettre aux employés de lister les articles d’un magasin.
-- [ ] Créer les tables nécessaires :
-- [ ] **`ITEMS`** : Stocke les informations des articles (nom, prix, etc.).
-- [ ] **`INVENTORY`** : Lien entre les magasins et les articles avec les quantités.
-
----
-
-## Étape 6 : Interface utilisateur (UI)
-- [ ] Implémenter une interface graphique avec **JavaFX** ou **Swing**.
-- [ ] Ajouter des champs de saisie pour les formulaires.
-- [ ] Ajouter des boutons pour les actions (connexion, création de compte, etc.).
-- [ ] Ajouter des tableaux pour afficher les données (magasins, inventaire, utilisateurs).
-
----
-
-## Étape 7 : Sécurisation et validations
-- [ ] Utiliser **BCrypt** pour le hachage des mots de passe.
-- [ ] Valider les entrées utilisateur :
-- [ ] Vérifier que les emails ont un format valide.
-- [ ] S'assurer que les champs obligatoires ne sont pas vides.
-
----
-
-## Étape 8 : Documentation
-- [ ] Ajouter des commentaires JavaDoc aux classes et méthodes.
-- [ ] Créer un schéma UML pour expliquer les relations entre les classes et la base de données.
-- [ ] Rédiger un fichier README expliquant comment exécuter l'application.
-
----
-
-## Étape 9 : Bonus
-- [ ] Implémenter un système de **sessions** pour :
-- [ ] Identifier quel utilisateur est actuellement connecté.
-- [ ] Personnaliser l'expérience utilisateur.
-- [ ] Ajouter la possibilité d'exporter des données au format **CSV** ou **JSON** :
-- [ ] Articles.
-- [ ] Utilisateurs.
-
----
-
-## Priorité
-1. **Étape 1 (Connexion).**
-2. **Étape 2 (Gestion des rôles).**
-3. **Étape 3 et 4 (Magasins et Inventaire).**
-4. **Étape 5 (Interface utilisateur).**
-5. **Étape 6 (Sécurisation).**
-6. **Documentation à chaque étape.**
+## Basic authentication need to be setup
+- [x]When running the application, the first window should ask the user
+- [x]to create an account (will require a email/password)
+- [x]a way to login (using only login/password)
+- [ ]To successfully create an account the email should have been "whitelisted" first
+- [x]Password should not be stored directly on the database (think about security)
+- [x]Login should be an email
+- [x]If an error is thrown during the login or create user action you need to give the user what is the issue
+## User management solution
+- [x]Create, Read, Delete user
+- [ ]Update user
+- [x]User is at least {id, email, pseudo, password, role}
+- [x]Normal users can read information about another user (not the password)
+- [x]You can create a new user even without being logged (just need your email to be whitelisted)
+- [ ]You can only update yourself (other users cannot update you EXCEPT if admin)
+- [ ]You can only delete yourself (other users cannot delete you EXCEPT if admin)
+## Admin management
+- [ ]The first user is by default an admin (or you can create a default admin/admin user)
+- [ ]Admin can "whitelist" emails to allow people to register
+- [ ]Admin can update an employee account
+- [x]Admin can delete an employee account
+- [x]Admin can create a new "store"
+- [ ]Admin can create and delete a new item in the inventory
+## Inventory management
+- [ ]An inventory is linked linked to a store (one inventory per store)
+- [ ]An inventory contains items
+- [ ]items have at least the following properties: id, name, price
+- [ ]each item should have a limited number in storage (cannot be lower than 0)
+- [ ]Inventory need to be browsable - you need to be able to display all the items
+- [ ]An employee can increase or decrease the number of one item in stock (selling or receiving item)
+## Store management
+- [x]Store can only be created / deleted by Admin
+- [x]Should only have two properties: id and name
+- [ ]A store only have one inventory
+- [ ]Admin can add an employee to the store
+- [ ]Employee only have access to store they have been added
+- [ ]You need to display (for admin and employee with access) the list of all people having access to the store

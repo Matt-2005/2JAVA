@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.xml.crypto.Data;
-
 public class AdminDAO {
     public boolean createStore(int ID, String Name) throws SQLException{
         String requeteSQL = "INSERT INTO STORE (ID, NAME) VALUES (?, ?)";
