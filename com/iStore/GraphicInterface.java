@@ -225,6 +225,7 @@ public class GraphicInterface {
     }
 
     private JPanel createEmployeePanel() {
+        AdminDAO adminDAO = new AdminDAO();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
@@ -275,6 +276,21 @@ public class GraphicInterface {
         });
 
         JButton removeEmployeeBtn = new JButton("Supprimer mon compte");
+        removeEmployeeBtn.addActionListener(e -> {
+            cardLayout.show(mainPanel, "Welcome");
+            emailToUpdate = currentEmailAccountConnected;
+            try {
+                if (adminDAO.deleteUser(emailToUpdate)) {
+                    JOptionPane.showMessageDialog(panel, "Votre compte a bien été supprimé", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Erreur lors de la création du magasin.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la suppression de votre compte : " + ex.getMessage());
+            }
+
+            
+        });
         JButton backButton = new JButton("Retour");
 
         // Bouton Retour vers AdminDashboard
@@ -555,9 +571,9 @@ public class GraphicInterface {
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        panel.add(new JLabel("Pseudo de l'utilisateur à suprimer :", JLabel.CENTER));
-        JTextField nameField = new JTextField();
-        panel.add(nameField);
+        panel.add(new JLabel("Email de l'utilisateur à suprimer :", JLabel.CENTER));
+        JTextField emailField = new JTextField();
+        panel.add(emailField);
         // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
@@ -567,9 +583,9 @@ public class GraphicInterface {
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
         validationButton.addActionListener(e -> {
             try {
-                String Pseudo = nameField.getText();
-                if (adminDAO.deleteUser(Pseudo)) {
-                    JOptionPane.showMessageDialog(panel, "Utilisateur " + Pseudo + " supprimé avec succès !.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                String Email = emailField.getText();
+                if (adminDAO.deleteUser(Email)) {
+                    JOptionPane.showMessageDialog(panel, "Utilisateur " + Email + " supprimé avec succès !.", "iStore", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(panel, "Erreur lors de la suppression de l'utilisateur.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }

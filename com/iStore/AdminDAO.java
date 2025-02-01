@@ -46,12 +46,12 @@ public class AdminDAO {
             }
     }
 
-    public boolean deleteUser(String Pseudo) throws SQLException {
-        String requeteSQL = "DELETE FROM USER WHERE PSEUDO = ?";
+    public boolean deleteUser(String Email) throws SQLException {
+        String requeteSQL = "DELETE FROM USER WHERE EMAIL = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
-                pstmt.setString(1, Pseudo);
+                pstmt.setString(1, Email);
                 int affectedRows = pstmt.executeUpdate();
 
                 return affectedRows > 0;
