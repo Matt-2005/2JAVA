@@ -15,9 +15,9 @@
 - [x] You can only update yourself (other users cannot update you EXCEPT if admin)
 - [x] You can only delete yourself (other users cannot delete you EXCEPT if admin)
 ## Admin management
-- [ ] The first user is by default an admin (or you can create a default admin/admin user)
+- [x] The first user is by default an admin (or you can create a default admin/admin user)
 - [ ] Admin can "whitelist" emails to allow people to register
-- [ ] Admin can update an employee account
+- [x] Admin can update an employee account
 - [x] Admin can delete an employee account
 - [x] Admin can create a new "store"
 - [ ] Admin can create and delete a new item in the inventory

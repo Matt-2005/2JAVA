@@ -10,15 +10,30 @@ import java.util.Base64;
 
 
 public class UserDAO {
-    public boolean createUser(User user) throws SQLException {
-        String sql = "INSERT INTO USER (EMAIL, PSEUDO, PASSWORD_HASH, SALT) VALUES (?, ?, ?, ?)";
+    public boolean firstUser() throws SQLException {
+        String requeteSQL = "SELECT COUNT(*) FROM USER";
 
         try (Connection conn = DatabaseConfig.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+            return false;
+    }
+
+    public boolean createUser(User user) throws SQLException {
+        String requeteSQL = "INSERT INTO USER (EMAIL, PSEUDO, PASSWORD_HASH, SALT, ROLE) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
                 pstmt.setString(1, user.getEmail());
                 pstmt.setString(2, user.getPseudo());
                 pstmt.setString(3, user.getPasswordHash());
                 pstmt.setString(4, user.getSalt());
+                pstmt.setString(5, user.getRole());
                 pstmt.executeUpdate();
 
                 return true;

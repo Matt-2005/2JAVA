@@ -141,20 +141,37 @@ public class GraphicInterface {
             String Password = new String(passwordField.getPassword());
             try{
                 PasswordHash.HashResults hashResults = PasswordHash.passwordHash(Password);
-    
-                User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), null);
-    
-                if (userDAO.verifyEmail(Email)) {
-                    System.out.println("This email is existing. Please try with an auther email or try to sign in.");
-                }
-                if (userDAO.createUser(user)) {
-                    if (user.getRole() == "Employé") {
-                        cardLayout.show(mainPanel, "EmployeePanel");
-                    } else {
-                        cardLayout.show(mainPanel, "AdminDashboard");
+                System.out.println(userDAO.firstUser());
+                if (!userDAO.firstUser()) {
+                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Admin");
+                    if (userDAO.verifyEmail(Email)) {
+                        System.out.println("This email is existing. Please try with an auther email or try to sign in.");
                     }
-                    
+                    if (userDAO.createUser(user)) {
+                        if (user.getRole() == "Employé") {
+                            cardLayout.show(mainPanel, "EmployeePanel");
+                        } else {
+                            cardLayout.show(mainPanel, "AdminDashboard");
+                        }
+                        
+                    }
+                } else {
+                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Employé");
+                    if (userDAO.verifyEmail(Email)) {
+                        System.out.println("This email is existing. Please try with an auther email or try to sign in.");
+                    }
+                    if (userDAO.createUser(user)) {
+                        if (user.getRole() == "Employé") {
+                            cardLayout.show(mainPanel, "EmployeePanel");
+                        } else {
+                            cardLayout.show(mainPanel, "AdminDashboard");
+                        }
+                        
+                    }
                 }
+    
+    
+
                 
             } catch (Exception ex) {
                 System.out.println("Erreur lors de la création du compte : " + ex.getMessage());
