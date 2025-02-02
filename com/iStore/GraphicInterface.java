@@ -950,7 +950,6 @@ public class GraphicInterface {
             INNER JOIN STORE S ON INV.STORE_ID = S.ID
             WHERE S.NAME = ?
         """;
-        System.out.println(storeName);
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
             pstmt.setString(1, storeName);

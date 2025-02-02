@@ -22,16 +22,16 @@
 - [x] Admin can create a new "store"
 - [ ] Admin can create and delete a new item in the inventory
 ## Inventory management
-- [ ] An inventory is linked linked to a store (one inventory per store)
-- [ ] An inventory contains items
-- [ ] items have at least the following properties: id, name, price
-- [ ] each item should have a limited number in storage (cannot be lower than 0)
-- [ ] Inventory need to be browsable - you need to be able to display all the items
+- [x] An inventory is linked linked to a store (one inventory per store)
+- [x] An inventory contains items
+- [x] items have at least the following properties: id, name, price
+- [x] each item should have a limited number in storage (cannot be lower than 0)
+- [x] Inventory need to be browsable - you need to be able to display all the items
 - [ ] An employee can increase or decrease the number of one item in stock (selling or receiving item)
 ## Store management
 - [x] Store can only be created / deleted by Admin
 - [x] Should only have two properties: id and name
-- [ ] A store only have one inventory
+- [x] A store only have one inventory
 - [ ] Admin can add an employee to the store
 - [ ] Employee only have access to store they have been added
 - [ ] You need to display (for admin and employee with access) the list of all people having access to the store
