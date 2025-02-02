@@ -43,7 +43,6 @@ public class GraphicInterface {
         mainPanel.add(createUpdateUserPanelForAdmin(), "UpdateUserForAdmin");
         mainPanel.add(createUpdateUserPanelForEmployee(), "UpdateUserForEmployee");
         mainPanel.add(createManageWhatInventory(), "WhatInventoryToManage");
-        mainPanel.add(createDisplayItemsPanel(), "DisplayItem");
 
 
         // Ajouter le panneau principal à la fenêtre
@@ -79,7 +78,7 @@ public class GraphicInterface {
 
         // Champs d'email et de mot de passe
         panel.add(new JLabel("Email :"));
-        JTextField emailField = new JTextField();
+        final JTextField emailField = new JTextField();
         panel.add(emailField);
 
         panel.add(new JLabel("Mot de passe :"));
@@ -784,7 +783,6 @@ public class GraphicInterface {
         
 
         JButton signUpButton = new JButton("Mettre à jour");
-        System.out.println(emailToUpdate);
         signUpButton.addActionListener(e -> {
             String newEmail = emailField.getText();
             String newPseudo = pseudoField.getText();
@@ -910,6 +908,7 @@ public class GraphicInterface {
                 String Name = nameField.getText();
                 if (adminDAO.verifyName(Name)) {
                     storeName = Name;
+                    mainPanel.add(createDisplayItemsPanel(), "DisplayItem");
                     cardLayout.show(mainPanel, "DisplayItem");
                 } else {
                     JOptionPane.showMessageDialog(panel, "Ce magasin n'existe pas", "Erreur", JOptionPane.ERROR_MESSAGE);
