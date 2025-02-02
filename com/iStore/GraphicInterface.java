@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
@@ -14,6 +15,7 @@ public class GraphicInterface {
     private CardLayout cardLayout;
     private String emailToUpdate;
     private String currentEmailAccountConnected;
+    private String storeName;
 
     public void myInterface() {
         // Initialisation de la fenêtre principale
@@ -40,6 +42,8 @@ public class GraphicInterface {
         mainPanel.add(createUpdateWhatUserPanel(), "WhatUserToUpdate");
         mainPanel.add(createUpdateUserPanelForAdmin(), "UpdateUserForAdmin");
         mainPanel.add(createUpdateUserPanelForEmployee(), "UpdateUserForEmployee");
+        mainPanel.add(createManageWhatInventory(), "WhatInventoryToManage");
+        mainPanel.add(createDisplayItemsPanel(), "DisplayItem");
 
 
         // Ajouter le panneau principal à la fenêtre
@@ -201,9 +205,12 @@ public class GraphicInterface {
         deleteStoreBtn.addActionListener(e -> cardLayout.show(mainPanel, "DeleteStore"));
         JButton listStoreBtn = new JButton("Voir les magasins");
         listStoreBtn.addActionListener(e -> cardLayout.show(mainPanel, "DisplayStore"));
+        JButton manageInventoryBtn = new JButton("Gérer les inventaires");
+        manageInventoryBtn.addActionListener(e -> cardLayout.show(mainPanel, "WhatInventoryToManage"));
         storePanel.add(createStoreBtn);
         storePanel.add(deleteStoreBtn);
         storePanel.add(listStoreBtn);
+        storePanel.add(manageInventoryBtn);
 
         // Section Gestion des Employés
         JPanel employeePanel = new JPanel();
@@ -223,10 +230,6 @@ public class GraphicInterface {
 
         // Section Gestion de l'Inventaire
         JPanel inventoryPanel = new JPanel();
-        inventoryPanel.setBorder(BorderFactory.createTitledBorder("Gestion de l'Inventaire"));
-        JButton manageInventoryBtn = new JButton("Gérer l'inventaire");
-        inventoryPanel.add(manageInventoryBtn);
-
         JButton backButton = new JButton("Retour");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
         inventoryPanel.add(backButton);
@@ -781,7 +784,7 @@ public class GraphicInterface {
         
 
         JButton signUpButton = new JButton("Mettre à jour");
-
+        System.out.println(emailToUpdate);
         signUpButton.addActionListener(e -> {
             String newEmail = emailField.getText();
             String newPseudo = pseudoField.getText();
@@ -852,7 +855,146 @@ public class GraphicInterface {
         return panel;
     }
 
-    
+    private JPanel createManageWhatInventory() {
+        AdminDAO adminDAO = new AdminDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 3, 10, 10));
+        // Titre
+        JLabel titleLabel = new JLabel("Liste des magasins", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.NORTH);
 
-    
+        // Définition des colonnes
+        String[] columnNames = {"ID", "Nom"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        List<Store> stores = new ArrayList<>();
+        
+        String requeteSQL = "SELECT ID, NAME FROM STORE";
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
+            ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    int Id = rs.getInt("ID");
+                    String Name = rs.getString("NAME");
+
+                    stores.add(new Store(Id, Name));
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (Store store : stores) {
+            model.addRow(new Object[]{store.getId(), store.getName()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        panel.add(new JLabel("Nom du magasin à gérer :", JLabel.CENTER));
+        final JTextField nameField = new JTextField();
+        panel.add(nameField);
+        // Panel pour les boutons
+        JPanel buttonPanel = new JPanel();
+        JButton backButton = new JButton("Retour");
+        JButton validationButton = new JButton("Ouvrir l'inventaire");
+        
+        // Bouton Retour vers AdminDashboard
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
+        validationButton.addActionListener(e -> {
+            try {
+                String Name = nameField.getText();
+                if (adminDAO.verifyName(Name)) {
+                    storeName = Name;
+                    cardLayout.show(mainPanel, "DisplayItem");
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Ce magasin n'existe pas", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de l'affiche des items : " + ex.getMessage());
+            }
+
+        });
+
+        // Ajouter les boutons au panel des boutons
+        buttonPanel.add(backButton);
+        buttonPanel.add(validationButton);
+
+        panel.add(buttonPanel, BorderLayout.CENTER);
+        
+
+        return panel;
+    }
+
+    private JPanel createDisplayItemsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        // Titre
+        JLabel titleLabel = new JLabel("Panneau Inventaire", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // Définition des colonnes
+        String[] columnNames = {"ID", "Name", "Price", "Stock"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        List<Item> items = new ArrayList<>();
+
+        String requeteSQL = """
+            SELECT I.ID, I.NAME, I.PRICE, I.STOCK
+            FROM ITEMS I
+            INNER JOIN INVENTORY INV ON I.ID = INV.ITEM_ID
+            INNER JOIN STORE S ON INV.STORE_ID = S.ID
+            WHERE S.NAME = ?
+        """;
+        System.out.println(storeName);
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+            pstmt.setString(1, storeName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("ID");
+                    String name = rs.getString("NAME");
+                    BigDecimal price = rs.getBigDecimal("PRICE"); 
+                    int stock = rs.getInt("STOCK");
+
+                    items.add(new Item(id, name, price, stock));
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (Item item : items) {
+            model.addRow(new Object[]{item.getId(), item.getName(), item.getPrice(), item.getStock()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Panel pour les boutons
+        JPanel buttonPanel = new JPanel();
+        JButton backButton = new JButton("Retour");
+
+        // Bouton Retour vers AdminDashboard
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
+
+        // Ajouter les boutons au panel des boutons
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        
+
+        return panel;
+    }
 }
+
+
