@@ -7,14 +7,16 @@ public class User {
     private String hashedPassword;
     private String Salt;
     private String Role;
+    private int storeID;
 
-    public User(int Id, String Email, String Pseudo, String hashedPassword, String Salt, String Role) {
+    public User(int Id, String Email, String Pseudo, String hashedPassword, String Salt, String Role, int storeID) {
         this.Id = Id;
         this.Email = Email;
         this.Pseudo = Pseudo;
         this.hashedPassword = hashedPassword;
         this.Salt = Salt;
         this.Role = Role;
+        this.storeID = storeID;
     }
 
     public int getId() {
@@ -63,5 +65,13 @@ public class User {
 
     public void setRole(String Role) {
         this.Role = Role;
+    }
+
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
     }
 }

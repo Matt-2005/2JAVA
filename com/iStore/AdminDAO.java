@@ -64,6 +64,21 @@ public class AdminDAO {
         return -1;
     }
 
+    public String getStoreName(int ID) throws SQLException {
+        String requeteSQL = "SELECT NAME FROM STORE WHERE ID = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setInt(1, ID);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getString("NAME");
+                }
+            }
+        return "";
+    }
+
     public boolean addInventory(int itemID, int storeID) throws SQLException {
         String requeteSQL = "INSERT INTO INVENTORY (ITEM_ID, STORE_ID) VALUES (?, ?)";
 

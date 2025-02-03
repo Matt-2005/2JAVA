@@ -13,7 +13,9 @@ public class CreateTables {
                 PSEUDO VARCHAR(100) NOT NULL, 
                 PASSWORD_HASH VARCHAR(255) NOT NULL,
                 SALT VARCHAR(100) NOT NULL,
-                ROLE VARCHAR(100) NOT NULL DEFAULT 'Employé'
+                ROLE VARCHAR(100) NOT NULL DEFAULT 'Employé',
+                STORE_ID INT NULL,
+                FOREIGN KEY (STORE_ID) REFERENCES STORE(ID)
                 );
                 """;
         
@@ -45,10 +47,10 @@ public class CreateTables {
 
         try (Connection conn = DatabaseConfig.getConnection();
             Statement stmt = conn.createStatement()) {
-                stmt.execute(createUserTable);
-                System.out.println("Table User crée avec succès !");
                 stmt.execute(createStoreTable);
                 System.out.println("Table Store crée avec succès !");
+                stmt.execute(createUserTable);
+                System.out.println("Table User crée avec succès !");
                 stmt.execute(createItemTable);
                 System.out.println("Table Items crée avec succès !");
                 stmt.execute(createInventoryTable);

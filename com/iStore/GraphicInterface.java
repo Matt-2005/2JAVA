@@ -16,12 +16,13 @@ public class GraphicInterface {
     private String emailToUpdate;
     private String currentEmailAccountConnected;
     private String storeName;
+    private int userStoreName;
 
     public void myInterface() {
         // Initialisation de la fenêtre principale
         frame = new JFrame("iStore App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(800, 600);
 
         // Initialisation du CardLayout
         cardLayout = new CardLayout();
@@ -44,6 +45,7 @@ public class GraphicInterface {
         mainPanel.add(createUpdateUserPanelForEmployee(), "UpdateUserForEmployee");
         mainPanel.add(createManageWhatInventory(), "WhatInventoryToManage");
         mainPanel.add(createAddItemPanel(), "AddItem");
+        mainPanel.add(createEmployeePanel(), "DisplayItem");
 
 
         // Ajouter le panneau principal à la fenêtre
@@ -147,7 +149,8 @@ public class GraphicInterface {
                 PasswordHash.HashResults hashResults = PasswordHash.passwordHash(Password);
                 System.out.println(userDAO.firstUser());
                 if (!userDAO.firstUser()) {
-                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Admin");
+                    System.out.println("admin");
+                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Admin", 1);
                     if (userDAO.verifyEmail(Email)) {
                         System.out.println("This email is existing. Please try with an auther email or try to sign in.");
                     }
@@ -160,7 +163,8 @@ public class GraphicInterface {
                         
                     }
                 } else {
-                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Employé");
+                    System.out.println("employé");
+                    User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Employé", 1);
                     if (userDAO.verifyEmail(Email)) {
                         System.out.println("This email is existing. Please try with an auther email or try to sign in.");
                     }
@@ -246,6 +250,7 @@ public class GraphicInterface {
 
     private JPanel createEmployeePanel() {
         AdminDAO adminDAO = new AdminDAO();
+        UserDAO userDAO = new UserDAO();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
@@ -255,12 +260,13 @@ public class GraphicInterface {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // Définition des colonnes
-        String[] columnNames = {"ID", "Nom", "Email", "Rôle"};
+        String[] columnNames = {"ID", "Nom", "Email", "Rôle", "Magasin"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
 
+        model.setRowCount(0);
         List<User> employees = new ArrayList<>();
         
-        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE FROM USER";
+        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE, STORE_ID FROM USER";
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
             ResultSet rs = pstmt.executeQuery()) {
@@ -270,17 +276,19 @@ public class GraphicInterface {
                     String Pseudo = rs.getString("PSEUDO");
                     String Email = rs.getString("EMAIL");
                     String Role = rs.getString("ROLE");
+                    int storeID = rs.getInt("STORE_ID");
 
-                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role, storeID));
+
+                    String storeNameFromDB = adminDAO.getStoreName(storeID);
+
+                    model.addRow(new Object[]{Id, Pseudo, Email, Role, storeNameFromDB});
+
                 }
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         
-        // **Remplir le tableau avec les données de la liste**
-        for (User user : employees) {
-            model.addRow(new Object[]{user.getId(), user.getPseudo(), user.getEmail(), user.getRole()});
-        }
 
         // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
@@ -312,6 +320,17 @@ public class GraphicInterface {
             
         });
         JButton backButton = new JButton("Retour");
+        JButton manageStore = new JButton("Gérer mon magasin");
+        manageStore.addActionListener(e -> {
+            try {
+                int storeID = userDAO.getUserStoreID(currentEmailAccountConnected);
+                storeName = adminDAO.getStoreName(storeID);
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la recupération du storeID : " + ex.getMessage());
+            }
+            mainPanel.add(createDisplayItemsEmployeePanel(), "DisplayItemForEmployee");
+            cardLayout.show(mainPanel, "DisplayItemForEmployee");
+        });
 
         // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
@@ -319,6 +338,7 @@ public class GraphicInterface {
         // Ajouter les boutons au panel des boutons
         buttonPanel.add(updateEmployeeBtn);
         buttonPanel.add(removeEmployeeBtn);
+        buttonPanel.add(manageStore);
         buttonPanel.add(backButton);
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -496,8 +516,9 @@ public class GraphicInterface {
 
     private JPanel createAddUserPanel() {
         UserDAO userDAO = new UserDAO();
+        AdminDAO adminDAO = new AdminDAO();
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2, 10, 10));
+        panel.setLayout(new GridLayout(5, 2, 10, 10));
 
         panel.add(new JLabel("Email :"));
         JTextField emailField = new JTextField();
@@ -511,31 +532,37 @@ public class GraphicInterface {
         JPasswordField passwordField = new JPasswordField();
         panel.add(passwordField);
 
+        panel.add(new JLabel("Magasin :"));
+        JTextField storeField = new JTextField();
+        panel.add(storeField);
+
         JButton backButton = new JButton("Retour");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
 
-        JButton signUpButton = new JButton("S'inscrire");
+        JButton signUpButton = new JButton("Ajouter");
 
         signUpButton.addActionListener(e -> {
             String Email = emailField.getText();
             String Pseudo = pseudoField.getText();
             String Password = new String(passwordField.getPassword());
+            String storeNameField = storeField.getText();
+            
             try{
+                int storeID = adminDAO.getStoreID(storeNameField); 
                 PasswordHash.HashResults hashResults = PasswordHash.passwordHash(Password);
     
-                User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), null);
+                User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Employé", storeID);
     
                 if (userDAO.verifyEmail(Email)) {
                     JOptionPane.showMessageDialog(panel, "Email déja utilisé, veuillez vous connecter.", "Erreur", JOptionPane.ERROR_MESSAGE);
 
                 }
+                if (!adminDAO.verifyName(storeNameField)) {
+                    System.out.println(adminDAO.verifyName(storeNameField));
+                    JOptionPane.showMessageDialog(panel, "Magasin inconnu", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
                 if (userDAO.createUser(user)) {
-                    if (user.getRole() == "Employé") {
-                        cardLayout.show(mainPanel, "EmployeePanel");
-                    } else {
-                        cardLayout.show(mainPanel, "AdminDashboard");
-                    }
-                    
+                    JOptionPane.showMessageDialog(panel, "Utilisateur " + Email + " créé avec succès !.", "iStore", JOptionPane.INFORMATION_MESSAGE);
                 }
                 
             } catch (Exception ex) {
@@ -575,7 +602,7 @@ public class GraphicInterface {
                     String Pseudo = rs.getString("PSEUDO");
                     String Role = rs.getString("ROLE");
 
-                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role, -1));
                 }
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -626,6 +653,7 @@ public class GraphicInterface {
     }
 
     private JPanel createDisplayUserPanel() {
+        AdminDAO adminDAO = new AdminDAO();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         // Titre
@@ -634,12 +662,12 @@ public class GraphicInterface {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // Définition des colonnes
-        String[] columnNames = {"ID", "Email", "Pseudo", "Rôle"};
+        String[] columnNames = {"ID", "Email", "Pseudo", "Rôle", "Magasin"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
-
+        model.setRowCount(0);
         List<User> employees = new ArrayList<>();
         
-        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE FROM USER";
+        String requeteSQL = "SELECT ID, EMAIL, PSEUDO, ROLE, STORE_ID FROM USER";
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL);
             ResultSet rs = pstmt.executeQuery()) {
@@ -649,18 +677,19 @@ public class GraphicInterface {
                     String Email = rs.getString("EMAIL");
                     String Pseudo = rs.getString("PSEUDO");
                     String Role = rs.getString("ROLE");
+                    int storeID = rs.getInt("STORE_ID");
 
-                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                    String storeName = adminDAO.getStoreName(storeID); 
+
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role, storeID));
+
+                    model.addRow(new Object[]{Id, Email, Pseudo, Role, storeName});
                 }
+                
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         
-        // **Remplir le tableau avec les données de la liste**
-        for (User user : employees) {
-            model.addRow(new Object[]{user.getId(), user.getEmail(), user.getPseudo(), user.getRole()});
-        }
-
         // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
@@ -708,7 +737,7 @@ public class GraphicInterface {
                     String Pseudo = rs.getString("PSEUDO");
                     String Role = rs.getString("ROLE");
 
-                    employees.add(new User(Id, Email, Pseudo, "", "", Role));
+                    employees.add(new User(Id, Email, Pseudo, "", "", Role, -1));
                 }
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -983,6 +1012,88 @@ public class GraphicInterface {
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "WhatInventoryToManage"));
+        JButton addItem = new JButton("Ajouter un item");
+        addItem.addActionListener(e -> cardLayout.show(mainPanel, "AddItem"));
+        JButton deleteItem = new JButton("Supprimer un item");
+        deleteItem.addActionListener(e -> {
+            mainPanel.add(createDeleteItemPanel(), "DeleteItem");
+            cardLayout.show(mainPanel, "DeleteItem");
+        });
+        JButton updateItem = new JButton("Mettre à jour un item");
+        updateItem.addActionListener(e -> {
+            mainPanel.add(createUpdateItemPanel(), "UpdateItem");
+            cardLayout.show(mainPanel, "UpdateItem");
+        });
+
+        // Bouton Retour vers AdminDashboard
+
+        // Ajouter les boutons au panel des boutons
+        buttonPanel.add(addItem);
+        buttonPanel.add(deleteItem);
+        buttonPanel.add(updateItem);
+        buttonPanel.add(backButton);
+
+
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        
+
+        return panel;
+    }
+
+    private JPanel createDisplayItemsEmployeePanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        // Titre
+        JLabel titleLabel = new JLabel("Panneau Inventaire", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // Définition des colonnes
+        String[] columnNames = {"ID", "Name", "Price", "Stock"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        List<Item> items = new ArrayList<>();
+
+        String requeteSQL = """
+            SELECT I.ID, I.NAME, I.PRICE, I.STOCK
+            FROM ITEMS I
+            INNER JOIN INVENTORY INV ON I.ID = INV.ITEM_ID
+            INNER JOIN STORE S ON INV.STORE_ID = S.ID
+            WHERE S.NAME = ?
+        """;
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+            pstmt.setString(1, storeName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("ID");
+                    String name = rs.getString("NAME");
+                    BigDecimal price = rs.getBigDecimal("PRICE"); 
+                    int stock = rs.getInt("STOCK");
+
+                    items.add(new Item(id, name, price, stock));
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(panel, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
+        
+        // **Remplir le tableau avec les données de la liste**
+        for (Item item : items) {
+            model.addRow(new Object[]{item.getId(), item.getName(), item.getPrice(), item.getStock()});
+        }
+
+        // Création du JTable avec le modèle dynamique
+        JTable employeeTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Panel pour les boutons
+        JPanel buttonPanel = new JPanel();
+        JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "EmployeePanel"));
         JButton addItem = new JButton("Ajouter un item");
         addItem.addActionListener(e -> cardLayout.show(mainPanel, "AddItem"));
         JButton deleteItem = new JButton("Supprimer un item");
