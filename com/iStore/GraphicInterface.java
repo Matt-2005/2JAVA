@@ -16,7 +16,6 @@ public class GraphicInterface {
     private String emailToUpdate;
     private String currentEmailAccountConnected;
     private String storeName;
-    private int userStoreName;
 
     public void myInterface() {
         // Initialisation de la fenêtre principale
