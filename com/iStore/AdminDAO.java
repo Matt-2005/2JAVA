@@ -1,5 +1,6 @@
 package com.iStore;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,8 +20,80 @@ public class AdminDAO {
         }
     }
 
+    public boolean createItem(Item item) throws SQLException{
+        String requeteSQL = "INSERT INTO ITEMS (NAME, PRICE, STOCK) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, item.getName());
+                pstmt.setBigDecimal(2, item.getPrice());
+                pstmt.setInt(3, item.getStock());
+                pstmt.executeUpdate();
+
+                return true;
+        }
+    }
+
+    public int getItemID(String Name) throws SQLException {
+        String requeteSQL = "SELECT ID FROM ITEMS WHERE NAME = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Name);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt("ID");
+                }
+            }
+        return -1;
+    }
+
+    public int getStoreID(String Name) throws SQLException {
+        String requeteSQL = "SELECT ID FROM STORE WHERE NAME = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Name);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt("ID");
+                }
+            }
+        return -1;
+    }
+
+    public boolean addInventory(int itemID, int storeID) throws SQLException {
+        String requeteSQL = "INSERT INTO INVENTORY (ITEM_ID, STORE_ID) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setInt(1, itemID);
+                pstmt.setInt(2, storeID);
+                int affectedRows = pstmt.executeUpdate();
+
+                return affectedRows > 0;
+            }
+    }
+
     public boolean verifyName(String Name) throws SQLException{
         String requeteSQL = "SELECT COUNT(*) FROM STORE WHERE NAME = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Name);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        return false;
+    }
+
+    public boolean verifyItemName(String Name) throws SQLException{
+        String requeteSQL = "SELECT COUNT(*) FROM ITEMS WHERE NAME = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
@@ -108,6 +181,21 @@ public class AdminDAO {
                 pstmt.setString(4, Salt);
                 pstmt.setString(5, Role);
                 pstmt.setString(6, emailToUpdate);
+                int affectedRows = pstmt.executeUpdate();
+
+                return affectedRows > 0;
+            }
+    }
+
+    public boolean updateItem(String itemToUpdate, String Name, BigDecimal Price, int Stock) throws SQLException {
+        String requeteSQL = "UPDATE ITEMS SET NAME = ?, PRICE = ?, STOCK = ? WHERE NAME = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(requeteSQL)) {
+                pstmt.setString(1, Name);
+                pstmt.setBigDecimal(2, Price);
+                pstmt.setInt(3, Stock);
+                pstmt.setString(4, itemToUpdate);
                 int affectedRows = pstmt.executeUpdate();
 
                 return affectedRows > 0;

@@ -43,6 +43,7 @@ public class GraphicInterface {
         mainPanel.add(createUpdateUserPanelForAdmin(), "UpdateUserForAdmin");
         mainPanel.add(createUpdateUserPanelForEmployee(), "UpdateUserForEmployee");
         mainPanel.add(createManageWhatInventory(), "WhatInventoryToManage");
+        mainPanel.add(createAddItemPanel(), "AddItem");
 
 
         // Ajouter le panneau principal à la fenêtre
@@ -981,22 +982,28 @@ public class GraphicInterface {
         // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "WhatInventoryToManage"));
         JButton addItem = new JButton("Ajouter un item");
+        addItem.addActionListener(e -> cardLayout.show(mainPanel, "AddItem"));
         JButton deleteItem = new JButton("Supprimer un item");
         deleteItem.addActionListener(e -> {
             mainPanel.add(createDeleteItemPanel(), "DeleteItem");
             cardLayout.show(mainPanel, "DeleteItem");
         });
         JButton updateItem = new JButton("Mettre à jour un item");
+        updateItem.addActionListener(e -> {
+            mainPanel.add(createUpdateItemPanel(), "UpdateItem");
+            cardLayout.show(mainPanel, "UpdateItem");
+        });
 
         // Bouton Retour vers AdminDashboard
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "WhatInventoryToManage"));
 
         // Ajouter les boutons au panel des boutons
-        buttonPanel.add(backButton);
         buttonPanel.add(addItem);
         buttonPanel.add(deleteItem);
         buttonPanel.add(updateItem);
+        buttonPanel.add(backButton);
+
 
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -1087,6 +1094,103 @@ public class GraphicInterface {
 
         return panel;
     }
+
+    private JPanel createAddItemPanel() {
+        AdminDAO adminDAO = new AdminDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2, 10, 10));
+
+        panel.add(new JLabel("Name :"));
+        JTextField nameField = new JTextField();
+        panel.add(nameField);
+
+        panel.add(new JLabel("Prix :"));
+        JTextField priceField = new JTextField();
+        panel.add(priceField);
+
+        panel.add(new JLabel("Stock :"));
+        JTextField stockField = new JTextField();
+        panel.add(stockField);
+
+        JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItem"));
+
+        JButton addButton = new JButton("Ajouter");
+
+        addButton.addActionListener(e -> {
+            String Name = nameField.getText();
+            BigDecimal Price = new BigDecimal(priceField.getText());
+            int Stock = Integer.parseInt(stockField.getText());
+            try{
+    
+                Item item = new Item(0, Name, Price, Stock);
+                if (adminDAO.verifyItemName(Name)) {
+                    JOptionPane.showMessageDialog(panel, "Cet item existe déja.", "Erreur", JOptionPane.ERROR_MESSAGE);
+
+                }
+                if (adminDAO.createItem(item)) {
+                    int itemID = adminDAO.getItemID(Name);
+                    int storeID = adminDAO.getStoreID(storeName);
+                    if (adminDAO.addInventory(itemID, storeID)) {
+                        JOptionPane.showMessageDialog(panel, "L'item " + item.getName() + " à été ajouté.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la création de l'item : " + ex.getMessage());
+            }
+        });
+
+        panel.add(backButton);
+        panel.add(addButton);
+
+        return panel;
+    }
+
+    private JPanel createUpdateItemPanel() {
+        AdminDAO adminDAO = new AdminDAO();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2, 10, 10));
+
+        panel.add(new JLabel("Name :"));
+        JTextField nameField = new JTextField();
+        panel.add(nameField);
+
+        panel.add(new JLabel("Prix :"));
+        JTextField priceField = new JTextField();
+        panel.add(priceField);
+
+        panel.add(new JLabel("Stock :"));
+        JTextField stockField = new JTextField();
+        panel.add(stockField);
+
+        JButton backButton = new JButton("Retour");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItem"));
+
+        JButton addButton = new JButton("Mettre à jour");
+
+        addButton.addActionListener(e -> {
+            String Name = nameField.getText();
+            BigDecimal Price = new BigDecimal(priceField.getText());
+            int Stock = Integer.parseInt(stockField.getText());
+            try{
+    
+                Item item = new Item(0, Name, Price, Stock);
+                if (adminDAO.updateItem(Name, Name, Price, Stock)) {
+                    JOptionPane.showMessageDialog(panel, "L'item " + item.getName() + " à été mis à jour.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            } catch (Exception ex) {
+                System.out.println("Erreur lors de la création de l'item : " + ex.getMessage());
+            }
+        });
+
+        panel.add(backButton);
+        panel.add(addButton);
+
+        return panel;
+    }
+
 }
 
 
