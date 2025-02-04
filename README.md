@@ -14,3 +14,19 @@ final String URL = "jdbc:mysql://localhost:8889/iStore";
 final String USER = "root";
 final String PASSWORD = "root";
 ```
+
+Voici les informations de connection:
+
+**Administrateur :** 
+- email : matthew.le@supinfo.com
+- mdp : Matt2005
+
+**Employés :** 
+- email : employe1@supinfo.com
+- mdp : employe1
+
+- email : employe1@supinfo.com
+- mdp : employe2
+
+- email : employe3@supinfo.com
+- mdp : employe3
