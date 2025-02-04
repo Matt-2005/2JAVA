@@ -1,10 +1,13 @@
-package com.iStore;
+package com.iStore.dao;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.iStore.config.DatabaseConfig;
+import com.iStore.model.Item;
 
 public class AdminDAO {
     public boolean createStore(int ID, String Name) throws SQLException{

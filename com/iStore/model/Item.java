@@ -1,4 +1,4 @@
-package com.iStore;
+package com.iStore.model;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package com.iStore;
+package com.iStore.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

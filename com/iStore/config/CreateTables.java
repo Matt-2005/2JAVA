@@ -1,4 +1,4 @@
-package com.iStore;
+package com.iStore.config;
 
 import java.sql.Statement;
 import java.sql.Connection;

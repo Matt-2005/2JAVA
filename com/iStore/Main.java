@@ -1,5 +1,8 @@
 package com.iStore;
 
+import com.iStore.config.CreateTables;
+import com.iStore.ui.GraphicInterface;
+
 // import java.util.Scanner;
 
 public class Main {
@@ -12,8 +15,8 @@ public class Main {
             System.out.println("Erreur lors de la création des tables : " + e.getMessage());
         }
 
-        GraphicInterface welcomeWindow = new GraphicInterface();
-        welcomeWindow.myInterface();
+        GraphicInterface graphicInterface = new GraphicInterface();
+        graphicInterface.myInterface();
         System.out.println("Interface graphique lancée !");
     }
 }

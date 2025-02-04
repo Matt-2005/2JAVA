@@ -1,4 +1,4 @@
-package com.iStore;
+package com.iStore.dao;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+
+import com.iStore.config.DatabaseConfig;
+import com.iStore.model.User;
 
 
 public class UserDAO {

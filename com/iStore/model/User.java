@@ -1,4 +1,4 @@
-package com.iStore;
+package com.iStore.model;
 
 public class User {
     private int Id;
