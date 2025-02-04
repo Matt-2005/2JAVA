@@ -1,6 +1,8 @@
 package com.iStore.ui.panels;
 
 import javax.swing.*;
+
+
 import java.awt.*;
 
 public class AdminPanel extends JPanel{

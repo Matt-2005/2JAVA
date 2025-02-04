@@ -9,9 +9,8 @@ import com.iStore.utils.PasswordHash;
 import com.iStore.utils.SessionManager;
 
 public class UpdateUserForEmployeePanel extends JPanel{
-    public UpdateUserForEmployeePanel(CardLayout cardLayout, JPanel mainPanel) {
+    public UpdateUserForEmployeePanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new GridLayout(5, 2, 10, 10));
         
         add(new JLabel("Email :"));

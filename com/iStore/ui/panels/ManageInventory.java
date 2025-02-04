@@ -14,8 +14,7 @@ import com.iStore.model.Item;
 import com.iStore.utils.SessionManager;
 
 public class ManageInventory extends JPanel{
-    public ManageInventory(CardLayout cardLayout, JPanel mainPanel) {
-        SessionManager sessionManager = new SessionManager();
+    public ManageInventory(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         setLayout(new BorderLayout());
         // Titre
         JLabel titleLabel = new JLabel("Panneau Inventaire", JLabel.CENTER);

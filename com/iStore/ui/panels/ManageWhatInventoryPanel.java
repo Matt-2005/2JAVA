@@ -14,9 +14,8 @@ import com.iStore.model.Store;
 import com.iStore.utils.SessionManager;
 
 public class ManageWhatInventoryPanel extends JPanel{
-    public ManageWhatInventoryPanel(CardLayout cardLayout, JPanel mainPanel) {
+    public ManageWhatInventoryPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new GridLayout(3, 3, 10, 10));
         // Titre
         JLabel titleLabel = new JLabel("Liste des magasins", JLabel.CENTER);

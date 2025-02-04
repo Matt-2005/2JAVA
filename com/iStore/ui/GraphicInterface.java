@@ -22,6 +22,7 @@ import com.iStore.ui.panels.UpdateUserForAdminPanel;
 import com.iStore.ui.panels.UpdateUserForEmployeePanel;
 import com.iStore.ui.panels.UpdateWhatUserPanel;
 import com.iStore.ui.panels.WelcomePanel;
+import com.iStore.utils.SessionManager;
 
 import java.awt.*;
 
@@ -36,29 +37,30 @@ public class GraphicInterface {
 
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
+        SessionManager sessionManager = new SessionManager();
 
 
         // Ajouter les différentes pages
         mainPanel.add(new WelcomePanel(cardLayout, mainPanel), "Welcome");
-        mainPanel.add(new AddItemPanel(cardLayout, mainPanel), "AddItem");
+        mainPanel.add(new AddItemPanel(cardLayout, mainPanel, sessionManager), "AddItem");
         mainPanel.add(new AddStorePanel(cardLayout, mainPanel), "StoreCreation"); //AddStore
         mainPanel.add(new AddUserPanel(cardLayout, mainPanel), "AddUser");
         mainPanel.add(new AdminPanel(cardLayout, mainPanel), "AdminDashboard");
-        mainPanel.add(new DeleteItemPanel(cardLayout, mainPanel), "DeleteItem");
+        mainPanel.add(new DeleteItemPanel(cardLayout, mainPanel, sessionManager), "DeleteItem");
         mainPanel.add(new DeleteStorePanel(cardLayout, mainPanel), "DeleteStore");
         mainPanel.add(new DeleteUserPanel(cardLayout, mainPanel), "DeleteUser");
-        mainPanel.add(new DisplayItemPanel(cardLayout, mainPanel), "DisplayItem");
+        mainPanel.add(new DisplayItemPanel(cardLayout, mainPanel, sessionManager), "DisplayItem");
         mainPanel.add(new DisplayStorePanel(cardLayout, mainPanel), "DisplayStore");
         mainPanel.add(new DisplayUserPanel(cardLayout, mainPanel), "DisplayUser");
-        mainPanel.add(new EmployeePanel(cardLayout, mainPanel), "EmployeePanel");
-        mainPanel.add(new LoginPanel(cardLayout, mainPanel), "Login");
-        mainPanel.add(new ManageInventory(cardLayout, mainPanel), "DisplayItemForEmployee");
-        mainPanel.add(new ManageWhatInventoryPanel(cardLayout, mainPanel), "WhatInventoryToManage");
+        mainPanel.add(new EmployeePanel(cardLayout, mainPanel, sessionManager), "EmployeePanel");
+        mainPanel.add(new LoginPanel(cardLayout, mainPanel, sessionManager), "Login");
+        mainPanel.add(new ManageInventory(cardLayout, mainPanel, sessionManager), "DisplayItemForEmployee");
+        mainPanel.add(new ManageWhatInventoryPanel(cardLayout, mainPanel, sessionManager), "WhatInventoryToManage");
         mainPanel.add(new SignUpPanel(cardLayout, mainPanel), "SignUp");
         mainPanel.add(new UpdateItemPanel(cardLayout, mainPanel), "UpdateItem");
-        mainPanel.add(new UpdateUserForAdminPanel(cardLayout, mainPanel), "UpdateUserForAdmin");
-        mainPanel.add(new UpdateUserForEmployeePanel(cardLayout, mainPanel), "UpdateUserForEmployee");
-        mainPanel.add(new UpdateWhatUserPanel(cardLayout, mainPanel), "WhatUserToUpdate");
+        mainPanel.add(new UpdateUserForAdminPanel(cardLayout, mainPanel, sessionManager), "UpdateUserForAdmin");
+        mainPanel.add(new UpdateUserForEmployeePanel(cardLayout, mainPanel, sessionManager), "UpdateUserForEmployee");
+        mainPanel.add(new UpdateWhatUserPanel(cardLayout, mainPanel, sessionManager), "WhatUserToUpdate");
         
         
 

@@ -14,9 +14,8 @@ import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
 public class UpdateWhatUserPanel extends JPanel{
-    public UpdateWhatUserPanel(CardLayout cardLayout, JPanel mainPanel) {
+    public UpdateWhatUserPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         UserDAO userDAO = new UserDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new GridLayout(3, 3, 10, 10));
         // Titre
         JLabel titleLabel = new JLabel("Liste des utilisateurs", JLabel.CENTER);

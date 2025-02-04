@@ -16,10 +16,9 @@ import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
 public class EmployeePanel extends JPanel{
-    public EmployeePanel(CardLayout cardLayout, JPanel mainPanel) {
+    public EmployeePanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
         UserDAO userDAO = new UserDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new BorderLayout());
 
         // Titre
@@ -92,7 +91,10 @@ public class EmployeePanel extends JPanel{
         manageStore.addActionListener(e -> {
             try {
                 int storeID = userDAO.getUserStoreID(sessionManager.getCurrentEmailAccoutConnected());
-                sessionManager.setStoreName(adminDAO.getStoreName(storeID));            
+                System.out.println(sessionManager.getCurrentEmailAccoutConnected());        
+                System.out.println(storeID);        
+                sessionManager.setStoreName(adminDAO.getStoreName(storeID));    
+                System.out.println(adminDAO.getStoreName(storeID));        
                 cardLayout.show(mainPanel, "DisplayItemForEmployee");
             } catch (Exception ex) {
                 System.out.println("Erreur lors de la recupération du storeID : " + ex.getMessage());

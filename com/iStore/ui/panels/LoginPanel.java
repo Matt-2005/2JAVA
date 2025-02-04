@@ -8,9 +8,8 @@ import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
 public class LoginPanel extends JPanel {
-    public LoginPanel(CardLayout cardLayout, JPanel mainPanel) {
+    public LoginPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         UserDAO userDAO = new UserDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new GridLayout(3, 2, 10, 10));
 
         // Champs d'email et de mot de passe

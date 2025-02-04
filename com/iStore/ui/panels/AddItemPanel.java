@@ -11,9 +11,8 @@ import com.iStore.utils.SessionManager;
 
 
 public class AddItemPanel extends JPanel{
-    public AddItemPanel(CardLayout cardLayout, JPanel mainPanel) {
+    public AddItemPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
-        SessionManager sessionManager = new SessionManager();
         setLayout(new GridLayout(4, 2, 10, 10));
 
         add(new JLabel("Name :"));
