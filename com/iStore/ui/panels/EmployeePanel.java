@@ -3,32 +3,40 @@ package com.iStore.ui.panels;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.AdminDAO;
 import com.iStore.dao.UserDAO;
 import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panneau d'affichage pour les employés.
+ * Cette interface affiche un tableau avec tous les utilisateurs ainsi que des boutons pour l'employé connecter permettant de gérer son compte, de le supprimer ou de gérer son magasin.
+ * Pour la gestion du compte, l'employé peut changer son email, son pseudo et son mot de passe.
+ * Pour la gestion du magasin, l'employé pourra gérer le magasin auquel il est affilié.
+ */
 public class EmployeePanel extends JPanel{
+    /**
+     * Constructeur du panneau d'affichage pour les employés.
+     * 
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     * @param sessionManager Le gestionnaire de session pour récupérer des informations de session.
+     */
     public EmployeePanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
         UserDAO userDAO = new UserDAO();
         setLayout(new BorderLayout());
 
-        // Titre
         JLabel titleLabel = new JLabel("Panneau Employé", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"ID", "Nom", "Email", "Rôle", "Magasin"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         model.setRowCount(0);
         List<User> employees = new ArrayList<>();
@@ -57,12 +65,10 @@ public class EmployeePanel extends JPanel{
             }
         
 
-        // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton updateEmployeeBtn = new JButton("Modifier mon compte");
         updateEmployeeBtn.addActionListener(e -> {
@@ -100,10 +106,8 @@ public class EmployeePanel extends JPanel{
 
         });
 
-        // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
 
-        // Ajouter les boutons au panel des boutons
         buttonPanel.add(updateEmployeeBtn);
         buttonPanel.add(removeEmployeeBtn);
         buttonPanel.add(manageStore);

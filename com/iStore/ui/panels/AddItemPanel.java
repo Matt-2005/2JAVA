@@ -9,8 +9,19 @@ import com.iStore.dao.AdminDAO;
 import com.iStore.model.Item;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panel permettant d'ajouter un nouvel item à l'inventaire.
+ * Cette interface graphique permet à l'utilisateur de saisir le nom, le prix et le stock de l'item.
+ */
+public class AddItemPanel extends JPanel {
 
-public class AddItemPanel extends JPanel{
+    /**
+     * Constructeur du panneau d'ajout d'Items.
+     * 
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     * @param sessionManager Le gestionnaire de session pour récupérer des informations de session.
+     */
     public AddItemPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(4, 2, 10, 10));
@@ -36,21 +47,18 @@ public class AddItemPanel extends JPanel{
             String Name = nameField.getText();
             BigDecimal Price = new BigDecimal(priceField.getText());
             int Stock = Integer.parseInt(stockField.getText());
-            try{
-    
+            try {
                 Item item = new Item(0, Name, Price, Stock);
                 if (adminDAO.verifyItemName(Name)) {
-                    JOptionPane.showMessageDialog(this, "Cet item existe déja.", "Erreur", JOptionPane.ERROR_MESSAGE);
-
+                    JOptionPane.showMessageDialog(this, "Cet item existe déjà.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
                 if (adminDAO.createItem(item)) {
                     int itemID = adminDAO.getItemID(Name);
                     int storeID = adminDAO.getStoreID(sessionManager.getStoreName());
                     if (adminDAO.addInventory(itemID, storeID)) {
-                        JOptionPane.showMessageDialog(this, "L'item " + item.getName() + " à été ajouté.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "L'item " + item.getName() + " a été ajouté.", "iStore", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-                
             } catch (Exception ex) {
                 System.out.println("Erreur lors de la création de l'item : " + ex.getMessage());
             }

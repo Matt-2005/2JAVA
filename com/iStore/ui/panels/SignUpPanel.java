@@ -2,12 +2,21 @@ package com.iStore.ui.panels;
 
 import javax.swing.*;
 import java.awt.*;
-
 import com.iStore.dao.UserDAO;
 import com.iStore.model.User;
 import com.iStore.utils.PasswordHash;
 
+/**
+ * Panneau permettant de s'inscrire.
+ * Cette interface demande un email, un pseudo puis un mot de passe puis va inserer le tout dans la base de donnée.
+ * Le mot de passe n'est pas directement stocké, c'est son hash et son sel(Salt) qui sont stocké pour ensuite pouvoir se connecter.
+ */
 public class SignUpPanel extends JPanel{
+    /**
+     * Constructeur du panneau d'inscription.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public SignUpPanel(CardLayout cardLayout, JPanel mainPanel) {
         UserDAO userDAO = new UserDAO();
         setLayout(new GridLayout(4, 2, 10, 10));

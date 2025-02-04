@@ -1,11 +1,20 @@
 package com.iStore.ui.panels;
 
 import javax.swing.*;
-
-
 import java.awt.*;
 
+/**
+ * Panneau d'affichage pour les Administrateurs.
+ * Cette interface permet a l'administrateur de gérer les magasins et les employés.
+ * Pour la gestion des magasins, l'administrateur peut en créer, en supprimer, les afficher et gerer leur inventaires.
+ * Pour la gestion des employés, l'administrateur peut en ajouter(en les affiliant à un magasin), en supprimer, les afficher puis mettre à jour un employé.
+ */
 public class AdminPanel extends JPanel{
+    /**
+     * Constructeur du panneau d'administration.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public AdminPanel(CardLayout cardLayout, JPanel mainPanel) {
         setLayout(new GridLayout(4, 1, 10, 10));
 
@@ -13,7 +22,7 @@ public class AdminPanel extends JPanel{
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel);
 
-        // Section Gestion des Magasins
+        //Gestion des Magasins
         JPanel storePanel = new JPanel();
         storePanel.setBorder(BorderFactory.createTitledBorder("Gestion des Magasins"));
         JButton createStoreBtn = new JButton("Créer un magasin");
@@ -29,7 +38,7 @@ public class AdminPanel extends JPanel{
         storePanel.add(listStoreBtn);
         storePanel.add(manageInventoryBtn);
 
-        // Section Gestion des Employés
+        //Gestion des Employés
         JPanel employeePanel = new JPanel();
         employeePanel.setBorder(BorderFactory.createTitledBorder("Gestion des Employés"));
         JButton addEmployeeBtn = new JButton("Ajouter un employé");
@@ -45,17 +54,13 @@ public class AdminPanel extends JPanel{
         employeePanel.add(listEmployeeBtn);
         employeePanel.add(updateUserButton);
 
-        // Section Gestion de l'Inventaire
-        JPanel inventoryPanel = new JPanel();
+        JPanel backButtonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Welcome"));
-        inventoryPanel.add(backButton);
+        backButtonPanel.add(backButton);
 
-
-
-        // Ajouter les sections au panel principal
         add(storePanel);
         add(employeePanel);
-        add(inventoryPanel);
+        add(backButtonPanel);
     }
 }

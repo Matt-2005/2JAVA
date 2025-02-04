@@ -5,27 +5,34 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.AdminDAO;
 import com.iStore.model.Item;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panneau permettant de supprimer un Item.
+ * Cette interface permet à l'administrateur et a l'employé de supprimer un item. 
+ * L'employé peut le faire seulement dans le magasin pour qui il travaille.
+ * L'administrateur peut le faire pour tous les items de chaque magasin.
+ */
 public class DeleteItemPanel extends JPanel{
+    /**
+     * Constructeur du panneau de suppression d'Items.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public DeleteItemPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(3, 3, 10, 10));
-        // Titre
         JLabel titleLabel = new JLabel("Liste des Items", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"ID", "Name", "Prix", "Stock"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         List<Item> items = new ArrayList<>();
         
@@ -53,12 +60,10 @@ public class DeleteItemPanel extends JPanel{
             JOptionPane.showMessageDialog(this, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
         
-        // **Remplir le tableau avec les données de la liste**
         for (Item item : items) {
             model.addRow(new Object[]{item.getId(), item.getName(), item.getPrice(), item.getStock()});
         }
 
-        // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -66,12 +71,10 @@ public class DeleteItemPanel extends JPanel{
         add(new JLabel("Nom de l'item à supprimer :", JLabel.CENTER));
         JTextField nameField = new JTextField();
         add(nameField);
-        // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
         JButton validationButton = new JButton("Suprimer");
         
-        // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItemForEmployee"));
         validationButton.addActionListener(e -> {
             try {
@@ -87,7 +90,6 @@ public class DeleteItemPanel extends JPanel{
             
         });
 
-        // Ajouter les boutons au panel des boutons
         buttonPanel.add(backButton);
         buttonPanel.add(validationButton);
 

@@ -1,7 +1,6 @@
 package com.iStore.ui;
 
 import javax.swing.*;
-
 import com.iStore.ui.panels.AddItemPanel;
 import com.iStore.ui.panels.AddStorePanel;
 import com.iStore.ui.panels.AddUserPanel;
@@ -19,13 +18,20 @@ import com.iStore.ui.panels.UpdateUserForEmployeePanel;
 import com.iStore.ui.panels.UpdateWhatUserPanel;
 import com.iStore.ui.panels.WelcomePanel;
 import com.iStore.utils.SessionManager;
-
 import java.awt.*;
 
-
+/**
+ * Cette classe est responsable de la création de l'interface graphique principale de l'application iStore.
+ * Elle configure la fenêtre principale, initialise le gestionnaire de disposition (CardLayout) 
+ * et ajoute les différents panneaux représentant les différentes pages de l'application.
+ */ 
 public class GraphicInterface {
     private JFrame frame;
-
+    /**
+     * Initialise et affiche l'interface graphique de l'application iStore.
+     * Cette méthode configure la fenêtre principale, ajoute les panneaux de l'application 
+     * au gestionnaire de cartes (CardLayout), et affiche le panneau d'accueil par défaut (WelcolePanel)
+     */
     public void myInterface() {
         frame = new JFrame("iStore App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

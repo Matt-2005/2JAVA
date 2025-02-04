@@ -4,26 +4,32 @@ import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.AdminDAO;
 import com.iStore.model.User;
 
+/**
+ * Panneau permettant de supprimer un utilisateur.
+ * Cette interface permet à l'administrateur de supprimer un utilisateur qu'il soit Admin ou Employé. 
+ * Il suffit d'entrer l'email de l'utilisateur en question.
+ */
 public class DeleteUserPanel extends JPanel{
+    /**
+     * Constructeur du panneau de suppression d'utilisateur.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public DeleteUserPanel(CardLayout cardLayout, JPanel mainPanel) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(3, 3, 10, 10));
-        // Titre
         JLabel titleLabel = new JLabel("Liste des utilisateurs", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"ID", "Email", "Pseudo", "Rôle"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         List<User> employees = new ArrayList<>();
         
@@ -44,12 +50,10 @@ public class DeleteUserPanel extends JPanel{
                 JOptionPane.showMessageDialog(this, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         
-        // **Remplir le tableau avec les données de la liste**
         for (User user : employees) {
             model.addRow(new Object[]{user.getId(), user.getEmail(), user.getPseudo(), user.getRole()});
         }
 
-        // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -57,12 +61,10 @@ public class DeleteUserPanel extends JPanel{
         add(new JLabel("Email de l'utilisateur à suprimer :", JLabel.CENTER));
         JTextField emailField = new JTextField();
         add(emailField);
-        // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
         JButton validationButton = new JButton("Suprimer");
         
-        // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
         validationButton.addActionListener(e -> {
             try {
@@ -78,7 +80,6 @@ public class DeleteUserPanel extends JPanel{
             
         });
 
-        // Ajouter les boutons au panel des boutons
         buttonPanel.add(backButton);
         buttonPanel.add(validationButton);
 

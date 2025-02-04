@@ -4,16 +4,25 @@ import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.UserDAO;
 import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panneau permettant à l'administrateur de choisir l'utilisateur qu'il faut mettre à jour.
+ * Cette interface affiche tous les utilisateur puis l'administrateur entre le nom de celui qu'il veut modifier.
+ */
 public class UpdateWhatUserPanel extends JPanel{
+    /**
+     * Constructeur du panneau savoir quel utilisateur modifier.
+     * 
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     * @param sessionManager Le gestionnaire de session pour récupérer des informations de session.
+     */
     public UpdateWhatUserPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         UserDAO userDAO = new UserDAO();
         setLayout(new GridLayout(3, 3, 10, 10));

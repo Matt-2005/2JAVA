@@ -2,13 +2,20 @@ package com.iStore.ui.panels;
 
 import java.awt.*;
 import java.math.BigDecimal;
-
 import javax.swing.*;
-
 import com.iStore.dao.AdminDAO;
 import com.iStore.model.Item;
 
+/**
+ * Panneau permettant de mettre à jour un item.
+ * Cette interface demande le nom, le prix et le stock d'un item pour le mettre à jour.
+ */
 public class UpdateItemPanel extends JPanel{
+    /**
+     * Constructeur du panneau de mise à jour d'un item.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public UpdateItemPanel(CardLayout cardLayout, JPanel mainPanel) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(4, 2, 10, 10));

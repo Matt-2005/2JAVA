@@ -4,27 +4,30 @@ import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.AdminDAO;
 import com.iStore.model.User;
 
+/**
+ *Panneau permettant d'afficher les utilisateurs.
+ */
 public class DisplayUserPanel extends JPanel{
+    /**
+     * Constructeur du panneau d'affichage des utilisateur'.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public DisplayUserPanel(CardLayout cardLayout, JPanel mainPanel) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new BorderLayout());
-        // Titre
         JLabel titleLabel = new JLabel("Panneau Utilisateurs", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"ID", "Email", "Pseudo", "Rôle", "Magasin"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         model.setRowCount(0);
         List<User> employees = new ArrayList<>();
         
@@ -51,19 +54,15 @@ public class DisplayUserPanel extends JPanel{
                 JOptionPane.showMessageDialog(this, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         
-        // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
 
-        // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
 
-        // Ajouter les boutons au panel des boutons
         buttonPanel.add(backButton);
 
         add(buttonPanel, BorderLayout.SOUTH);

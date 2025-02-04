@@ -2,17 +2,27 @@ package com.iStore.ui.panels;
 
 import javax.swing.*;
 import java.awt.*;
-
 import com.iStore.dao.UserDAO;
 import com.iStore.model.User;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panneau permettant de se connecter.
+ * Cette interface demande un email et un mot de passe.
+ * Elle va ensuite comparer l'email et le mot de passe grace a userDAO.verifyAccount() en recupérant le hash et le sel(Salt) dans la base de donnée.
+ */
 public class LoginPanel extends JPanel {
+    /**
+     * Constructeur du panneau pour se connecter.
+     * 
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     * @param sessionManager Le gestionnaire de session pour récupérer des informations de session.
+     */
     public LoginPanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         UserDAO userDAO = new UserDAO();
         setLayout(new GridLayout(3, 2, 10, 10));
 
-        // Champs d'email et de mot de passe
         add(new JLabel("Email :"));
         final JTextField emailField = new JTextField();
         add(emailField);

@@ -4,8 +4,17 @@ import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Classe responsable de la création des tables nécessaires à l'application iStore dans la base de données.
+ */
 public class CreateTables {
-    public void createTable() throws SQLException{
+        /**
+     * Crée les tables de la base de données si elles n'existent pas déjà.
+     * Les tables créées sont : USER, STORE, ITEMS, et INVENTORY.
+     *
+     * @throws SQLException si une erreur survient lors de l'exécution des requêtes SQL.
+     */
+        public void createTable() throws SQLException{
         String createUserTable = """
                 CREATE TABLE IF NOT EXISTS USER (
                 ID INT AUTO_INCREMENT PRIMARY KEY,

@@ -3,29 +3,33 @@ package com.iStore.ui.panels;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
-
 import com.iStore.config.DatabaseConfig;
 import com.iStore.dao.AdminDAO;
 import com.iStore.model.Store;
 
-
+/**
+ * Panneau permettant de supprimer un magasin.
+ * Cette interface permet à l'administrateur de supprimer un magasin. 
+ * Il suffit d'entrer le nom de celui ci pour le supprimer.
+ */
 public class DeleteStorePanel extends JPanel{
+    /**
+     * Constructeur du panneau de suppression de magasin.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public DeleteStorePanel(CardLayout cardLayout, JPanel mainPanel) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(3, 3, 10, 10));
-        // Titre
         JLabel titleLabel = new JLabel("Liste des magasins", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"ID", "Nom"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0); // Modèle de tableau vide
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         List<Store> stores = new ArrayList<>();
         
@@ -44,12 +48,10 @@ public class DeleteStorePanel extends JPanel{
                 JOptionPane.showMessageDialog(this, "Erreur SQL : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         
-        // **Remplir le tableau avec les données de la liste**
         for (Store store : stores) {
             model.addRow(new Object[]{store.getId(), store.getName()});
         }
 
-        // Création du JTable avec le modèle dynamique
         JTable employeeTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -57,12 +59,10 @@ public class DeleteStorePanel extends JPanel{
         add(new JLabel("Nom du magasin a suprimer :", JLabel.CENTER));
         JTextField nameField = new JTextField();
         add(nameField);
-        // Panel pour les boutons
         JPanel buttonPanel = new JPanel();
         JButton backButton = new JButton("Retour");
         JButton validationButton = new JButton("Suprimer");
         
-        // Bouton Retour vers AdminDashboard
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "AdminDashboard"));
         validationButton.addActionListener(e -> {
             try {
@@ -78,7 +78,6 @@ public class DeleteStorePanel extends JPanel{
             
         });
 
-        // Ajouter les boutons au panel des boutons
         buttonPanel.add(backButton);
         buttonPanel.add(validationButton);
 

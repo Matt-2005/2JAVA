@@ -1,14 +1,23 @@
 package com.iStore.ui.panels;
 
 import java.awt.*;
-
 import javax.swing.*;
-
 import com.iStore.dao.AdminDAO;
 import com.iStore.utils.PasswordHash;
 import com.iStore.utils.SessionManager;
 
+/**
+ * Panneau permettant à l'employé de mettre son compte à jour.
+ * Cette interface permet de rentrer l'email, le pseudo et le mot de passe pour mettre à jour son compte.
+ */
 public class UpdateUserForEmployeePanel extends JPanel{
+    /**
+     * Constructeur du panneau pour mette à jour un utilisateur.
+     * 
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     * @param sessionManager Le gestionnaire de session pour récupérer des informations de session.
+     */
     public UpdateUserForEmployeePanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(4, 2, 10, 10));

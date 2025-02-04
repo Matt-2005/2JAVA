@@ -6,7 +6,18 @@ import javax.swing.*;
 
 import com.iStore.dao.AdminDAO;
 
-public class AddStorePanel extends JPanel{
+/**
+ * Panneau permettant d'ajouter un magasin.
+ * Cette interface permet a l'administrateur de saisir le nom du magasin pour le créer.
+ */
+public class AddStorePanel extends JPanel {
+
+    /**
+     * Constructeur du panneau d'ajout de magasin.
+     *
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public AddStorePanel(CardLayout cardLayout, JPanel mainPanel) {
         AdminDAO adminDAO = new AdminDAO();
         setLayout(new GridLayout(2, 2, 10, 10));
@@ -40,6 +51,5 @@ public class AddStorePanel extends JPanel{
         });
         
         add(createButton);
-
     }
 }

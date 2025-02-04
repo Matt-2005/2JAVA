@@ -9,7 +9,17 @@ import com.iStore.dao.UserDAO;
 import com.iStore.model.User;
 import com.iStore.utils.PasswordHash;
 
+/**
+ * Panneau permettant d'ajouter un utilisateur.
+ * Cette internface permet à l'administrateur de rentrer l'email, le pseudo, le mot de passe puis le magasin auquel sera affecté ce nouvel employé.
+ * Le mot de passe n'est pas directement stocké dans la base de donnée, il est d'abord hashé puis stocké avec le sel(Salt) qui va avec pour pouvoir le comparé lors d'une connection.
+ */
 public class AddUserPanel extends JPanel{
+    /**
+     * Constructeur du panneau d'ajout d'utilisateur.
+     * @param cardLayout Le gestionnaire de disposition pour la navigation entre les panneaux.
+     * @param mainPanel  Le panneau principal contenant tous les écrans de l'application.
+     */
     public AddUserPanel(CardLayout cardLayout, JPanel mainPanel) {
         UserDAO userDAO = new UserDAO();
         AdminDAO adminDAO = new AdminDAO();
