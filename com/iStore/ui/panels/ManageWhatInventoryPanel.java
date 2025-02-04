@@ -68,6 +68,7 @@ public class ManageWhatInventoryPanel extends JPanel{
                 String Name = nameField.getText();
                 if (adminDAO.verifyName(Name)) {
                     sessionManager.setStoreName(Name);
+                    mainPanel.add(new DisplayItemPanel(cardLayout, mainPanel, sessionManager), "DisplayItem");
                     cardLayout.show(mainPanel, "DisplayItem");
                 } else {
                     JOptionPane.showMessageDialog(this, "Ce magasin n'existe pas", "Erreur", JOptionPane.ERROR_MESSAGE);

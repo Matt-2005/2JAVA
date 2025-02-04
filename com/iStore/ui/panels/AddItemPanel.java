@@ -28,7 +28,7 @@ public class AddItemPanel extends JPanel{
         add(stockField);
 
         JButton backButton = new JButton("Retour");
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItem"));
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItemForEmployee"));
 
         JButton addButton = new JButton("Ajouter");
 

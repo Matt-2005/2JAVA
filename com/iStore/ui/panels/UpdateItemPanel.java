@@ -26,27 +26,31 @@ public class UpdateItemPanel extends JPanel{
         add(stockField);
 
         JButton backButton = new JButton("Retour");
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItem"));
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItemForEmployee"));
 
-        JButton addButton = new JButton("Mettre à jour");
+        JButton updateButton = new JButton("Mettre à jour");
 
-        addButton.addActionListener(e -> {
+        updateButton.addActionListener(e -> {
             String Name = nameField.getText();
             BigDecimal Price = new BigDecimal(priceField.getText());
             int Stock = Integer.parseInt(stockField.getText());
             try{
-    
-                Item item = new Item(0, Name, Price, Stock);
-                if (adminDAO.updateItem(Name, Name, Price, Stock)) {
-                    JOptionPane.showMessageDialog(this, "L'item " + item.getName() + " à été mis à jour.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                if (adminDAO.verifyItemName(Name)) {
+                    Item item = new Item(0, Name, Price, Stock);
+                    if (adminDAO.updateItem(Name, Name, Price, Stock)) {
+                        JOptionPane.showMessageDialog(this, "L'item " + item.getName() + " à été mis à jour.", "iStore", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Item inexistant", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
                 
+                
             } catch (Exception ex) {
-                System.out.println("Erreur lors de la création de l'item : " + ex.getMessage());
+                System.out.println("Erreur lors de la mise a jour de l'item : " + ex.getMessage());
             }
         });
 
         add(backButton);
-        add(addButton);
+        add(updateButton);
     }
 }

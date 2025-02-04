@@ -70,10 +70,12 @@ public class ManageInventory extends JPanel{
         addItem.addActionListener(e -> cardLayout.show(mainPanel, "AddItem"));
         JButton deleteItem = new JButton("Supprimer un item");
         deleteItem.addActionListener(e -> {
+            mainPanel.add(new DeleteItemPanel(cardLayout, mainPanel, sessionManager), "DeleteItem");
             cardLayout.show(mainPanel, "DeleteItem");
         });
         JButton updateItem = new JButton("Mettre à jour un item");
         updateItem.addActionListener(e -> {
+            mainPanel.add(new UpdateItemPanel(cardLayout, mainPanel), "UpdateItem");
             cardLayout.show(mainPanel, "UpdateItem");
         });
 

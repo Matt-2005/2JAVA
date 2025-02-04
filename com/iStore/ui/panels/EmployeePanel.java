@@ -91,10 +91,8 @@ public class EmployeePanel extends JPanel{
         manageStore.addActionListener(e -> {
             try {
                 int storeID = userDAO.getUserStoreID(sessionManager.getCurrentEmailAccoutConnected());
-                System.out.println(sessionManager.getCurrentEmailAccoutConnected());        
-                System.out.println(storeID);        
                 sessionManager.setStoreName(adminDAO.getStoreName(storeID));    
-                System.out.println(adminDAO.getStoreName(storeID));        
+                mainPanel.add(new ManageInventory(cardLayout, mainPanel, sessionManager), "DisplayItemForEmployee");
                 cardLayout.show(mainPanel, "DisplayItemForEmployee");
             } catch (Exception ex) {
                 System.out.println("Erreur lors de la recupération du storeID : " + ex.getMessage());

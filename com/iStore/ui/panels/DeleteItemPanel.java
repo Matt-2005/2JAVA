@@ -72,7 +72,7 @@ public class DeleteItemPanel extends JPanel{
         JButton validationButton = new JButton("Suprimer");
         
         // Bouton Retour vers AdminDashboard
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItem"));
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "DisplayItemForEmployee"));
         validationButton.addActionListener(e -> {
             try {
                 String Name = nameField.getText();

@@ -35,9 +35,7 @@ public class SignUpPanel extends JPanel{
             String Password = new String(passwordField.getPassword());
             try{
                 PasswordHash.HashResults hashResults = PasswordHash.passwordHash(Password);
-                System.out.println(userDAO.firstUser());
                 if (!userDAO.firstUser()) {
-                    System.out.println("admin");
                     User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Admin", 1);
                     if (userDAO.verifyEmail(Email)) {
                         System.out.println("This email is existing. Please try with an auther email or try to sign in.");
@@ -51,7 +49,6 @@ public class SignUpPanel extends JPanel{
                         
                     }
                 } else {
-                    System.out.println("employé");
                     User user = new User(0, Email, Pseudo, hashResults.getHashedPassword(), hashResults.getSalt(), "Employé", 1);
                     if (userDAO.verifyEmail(Email)) {
                         System.out.println("This email is existing. Please try with an auther email or try to sign in.");

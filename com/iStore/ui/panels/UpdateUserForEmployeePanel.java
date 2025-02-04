@@ -11,7 +11,7 @@ import com.iStore.utils.SessionManager;
 public class UpdateUserForEmployeePanel extends JPanel{
     public UpdateUserForEmployeePanel(CardLayout cardLayout, JPanel mainPanel, SessionManager sessionManager) {
         AdminDAO adminDAO = new AdminDAO();
-        setLayout(new GridLayout(5, 2, 10, 10));
+        setLayout(new GridLayout(4, 2, 10, 10));
         
         add(new JLabel("Email :"));
         JTextField emailField = new JTextField();
@@ -20,10 +20,6 @@ public class UpdateUserForEmployeePanel extends JPanel{
         add(new JLabel("Pseudo :"));
         JTextField pseudoField = new JTextField();
         add(pseudoField);
-
-        add(new JLabel("Role :"));
-        JTextField roleField = new JTextField();
-        add(roleField);
 
         add(new JLabel("Mot de passe :"));
         JPasswordField passwordField = new JPasswordField();
@@ -37,7 +33,7 @@ public class UpdateUserForEmployeePanel extends JPanel{
         signUpButton.addActionListener(e -> {
             String newEmail = emailField.getText();
             String newPseudo = pseudoField.getText();
-            String newRole = roleField.getText();
+            String newRole = "Employé";
             String newPassword = new String(passwordField.getPassword());
             try{
                 PasswordHash.HashResults hashResults = PasswordHash.passwordHash(newPassword);
