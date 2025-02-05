@@ -30,3 +30,5 @@ Voici les informations de connection:
 
 - email : employe3@supinfo.com
 - mdp : employe3
+
+**Afin de pouvoir voir les données sur l'intreface graphique apres avoir créé/supprimer/modifier quoi que ce soit, veuillez relancer le programme. L'interface ne se rafraichi pas.**
